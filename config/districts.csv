@@ -1,0 +1,31 @@
+lea_code,district_name,district_group,selected
+920,Wake County Public Schools,Large,TRUE
+600,Charlotte-Mecklenburg County Schools,Large,TRUE
+410,Guilford County Public Schools,Large,TRUE
+260,Cumberland County Schools,Large,TRUE
+340,Winston-Salem Forsyth County Schools,Large,TRUE
+900,Union County Schools,Large,TRUE
+320,Durham County Public Schools,Large,TRUE
+110,Buncombe County Public Schools,Large,TRUE
+360,Gaston County Public Schools,Large,TRUE
+670,Onslow County Public Schools,Large,TRUE
+660,Northampton County Public Schools,Medium,TRUE
+910,Vance County Schools,Medium,TRUE
+970,Wilkes County Public Schools,Medium,TRUE
+860,Surry County Public Schools,Medium,TRUE
+460,Hertford County Public Schools,Medium,TRUE
+300,Davie County Schools,Medium,TRUE
+090,Bladen County Schools,Medium,TRUE
+440,Haywood County Schools,Medium,TRUE
+400,Greene County Public Schools,Medium,TRUE
+930,Warren County Public Schools,Medium,TRUE
+060,Avery County Public Schools,Small,TRUE
+480,Hyde County Schools,Small,TRUE
+580,Martin County Schools,Small,TRUE
+050,Ashe County Schools,Small,TRUE
+150,Camden County Schools,Small,TRUE
+220,Clay County Schools,Small,TRUE
+370,Gates County Schools,Small,TRUE
+870,Swain County Schools,Small,TRUE
+030,Alleghany County Schools,Small,TRUE
+890,Tyrrell County Schools,Small,TRUE

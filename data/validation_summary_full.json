@@ -1,0 +1,15 @@
+{
+  "retrieved_at": "2026-10-26T14:00:45Z",
+  "year_range": "2004-05 to 2024-25",
+  "years": 21,
+  "rows_total": 5093,
+  "traditional_districts": 115,
+  "rows_traditional_districts": 2415,
+  "district_year_pairs_expected": 2415,
+  "rows_missing_a6_all_lea": 1,
+  "rows_missing_a6_districts": 0,
+  "rows_missing_a7_districts": 0,
+  "adm_residual_max": 0.307,
+  "a6_reconcile_failures": 1,
+  "districts_with_gaps": 0
+}

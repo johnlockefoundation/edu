@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NC School District Finance Explorer — John Locke Foundation</title>
+<meta name="description" content="Interactive map of enrollment, spending and staffing for 30 North Carolina school districts, FY2005–FY2025, from the NCDPI Statistical Profile.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230d6b8a'/%3E%3Cpath d='M16 6.5l6.5 3.9v11.2L16 25.5l-6.5-3.9V10.4z' fill='%23fff' opacity='.92'/%3E%3Cpath d='M16 10.2l3.4 2v6.6L16 20.8l-3.4-2v-6.6z' fill='%230d6b8a'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/vendor/leaflet.css">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="titles">
+    <h1>North Carolina School District Finance Explorer</h1>
+    <p>30 districts &middot; 21 fiscal years &middot; NCDPI Statistical Profile, Tables A6 &amp; A7</p>
+  </div>
+  <div class="year-badge" aria-live="polite">
+    <span id="yearLabel">FY2025</span>
+    <small id="syLabel">2024&ndash;25</small>
+  </div>
+</header>
+
+<main class="layout">
+
+  <aside class="panel" aria-label="Controls and rankings">
+
+    <div class="field">
+      <label for="metric">Measure</label>
+      <select id="metric"></select>
+      <p class="hint" id="metricHint"></p>
+    </div>
+
+    <div class="field">
+      <span class="label">District group <span class="muted">by OSP recipients</span></span>
+      <div class="chips" role="group" aria-label="Filter by district group">
+        <button class="chip is-on" data-group="all" aria-pressed="true">All <span>30</span></button>
+        <button class="chip" data-group="Large" aria-pressed="false">Large <span>10</span></button>
+        <button class="chip" data-group="Medium" aria-pressed="false">Medium <span>10</span></button>
+        <button class="chip" data-group="Small" aria-pressed="false">Small <span>10</span></button>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="search">Find a district</label>
+      <input id="search" type="search" placeholder="Start typing a name…" autocomplete="off">
+    </div>
+
+    <div class="legend" aria-label="Color scale">
+      <div class="legend-head">
+        <span id="legendTitle">Total per-pupil spending</span>
+        <span class="muted" id="legendNote">7 quantile classes</span>
+      </div>
+      <div class="legend-strip" id="legendStrip" aria-hidden="true"></div>
+      <div class="legend-ends"><span id="legendMin"></span><span id="legendMax"></span></div>
+      <div class="legend-scale" role="group" aria-label="Color scale basis">
+        <button data-scale="year" class="is-on" aria-pressed="true">Per year</button>
+        <button data-scale="fixed" aria-pressed="false">Fixed</button>
+      </div>
+    </div>
+
+    <section class="rank" aria-labelledby="rankTitle">
+      <h2 id="rankTitle">Ranking <span class="muted" id="rankYear"></span></h2>
+      <ol id="rankList" class="rank-list"></ol>
+    </section>
+
+    <details class="about">
+      <summary>About the data</summary>
+      <div class="about-body">
+        <p><strong>Enrollment</strong> is final ADM. <strong>Spending</strong> is Table A7 current
+        expenditures by source of funds; per-pupil figures are rounded to the nearest dollar.
+        <strong>Staffing</strong> is Table A6 total positions funded from all sources.</p>
+        <p>The NCDPI year code is the school year's ending year, which is also the state fiscal
+        year: FY2025 = 2024&ndash;25.</p>
+        <p>State + local + federal per-pupil differs from the total by up to $1 because each
+        component is rounded independently.</p>
+        <p><a href="data/ncdpi_osp_30districts_fy2005_2025.csv" download>Download the data (CSV, 630 rows)</a></p>
+      </div>
+    </details>
+
+  </aside>
+
+  <section class="stage" aria-label="Map and time controls">
+    <div id="map" role="application" aria-label="Choropleth map of North Carolina school districts"></div>
+
+    <article id="detail" class="detail" hidden aria-live="polite">
+      <button class="detail-close" id="detailClose" aria-label="Close district details">&times;</button>
+      <header>
+        <h2 id="detailName"></h2>
+        <div class="detail-meta">
+          <span class="pill" id="detailGroup"></span>
+          <span class="muted" id="detailLea"></span>
+        </div>
+      </header>
+      <div class="detail-value">
+        <strong id="detailValue"></strong>
+        <span id="detailMetric"></span>
+        <span class="rank-badge" id="detailRank"></span>
+      </div>
+      <dl class="stat-grid" id="statGrid"></dl>
+      <figure class="trend">
+        <figcaption><span id="trendTitle">Trend, FY2005–FY2025</span></figcaption>
+        <div id="chart"></div>
+      </figure>
+    </article>
+
+    <div class="timeline">
+      <button id="play" class="play" aria-label="Play through years" aria-pressed="false">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path id="playIcon" d="M4 2.5v11l9-5.5z"/></svg>
+      </button>
+      <div class="slider-wrap">
+        <input id="year" type="range" min="2005" max="2025" step="1" value="2025"
+               aria-label="Fiscal year">
+        <div class="ticks" aria-hidden="true">
+          <span>2005</span><span>2010</span><span>2015</span><span>2020</span><span>2025</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <p>
+    Source: NC Department of Public Instruction, Statistical Profile, Tables A6 and A7.
+    District boundaries: U.S. Census Bureau TIGER/Line 2024. Grey areas are North Carolina
+    districts outside the 30-district study panel.
+  </p>
+  <p class="muted">Figures are as published by NCDPI and may be revised in later releases.</p>
+</footer>
+
+<script src="assets/vendor/leaflet.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>

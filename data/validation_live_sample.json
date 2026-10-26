@@ -1,0 +1,3218 @@
+[
+  {
+    "year": 2005,
+    "lea": "040",
+    "district": "Anson County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        27,
+        27
+      ],
+      "teachers": [
+        301,
+        301
+      ],
+      "professionals": [
+        28,
+        28
+      ],
+      "other_personnel": [
+        194,
+        194
+      ],
+      "total_personnel": [
+        550,
+        550
+      ],
+      "ADM": [
+        4305,
+        4305
+      ],
+      "total_expenditures": [
+        34246952.0,
+        34246952.0
+      ],
+      "pp_total": [
+        7955.15,
+        7955.15
+      ],
+      "pp_local": [
+        1066.19,
+        1066.19
+      ],
+      "pp_state": [
+        5421.15,
+        5421.15
+      ]
+    }
+  },
+  {
+    "year": 2005,
+    "lea": "050",
+    "district": "Ashe County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        22,
+        22
+      ],
+      "teachers": [
+        242,
+        242
+      ],
+      "professionals": [
+        35,
+        35
+      ],
+      "other_personnel": [
+        215,
+        215
+      ],
+      "total_personnel": [
+        514,
+        514
+      ],
+      "ADM": [
+        3176,
+        3176
+      ],
+      "total_expenditures": [
+        26760150.0,
+        26760150.0
+      ],
+      "pp_total": [
+        8425.74,
+        8425.74
+      ],
+      "pp_local": [
+        1474.44,
+        1474.44
+      ],
+      "pp_state": [
+        5840.68,
+        5840.68
+      ]
+    }
+  },
+  {
+    "year": 2005,
+    "lea": "060",
+    "district": "Avery County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        23,
+        23
+      ],
+      "teachers": [
+        190,
+        190
+      ],
+      "professionals": [
+        34,
+        34
+      ],
+      "other_personnel": [
+        140,
+        140
+      ],
+      "total_personnel": [
+        387,
+        387
+      ],
+      "ADM": [
+        2258,
+        2258
+      ],
+      "total_expenditures": [
+        21251714.0,
+        21251714.0
+      ],
+      "pp_total": [
+        9411.74,
+        9411.74
+      ],
+      "pp_local": [
+        1855.34,
+        1855.34
+      ],
+      "pp_state": [
+        6328.58,
+        6328.58
+      ]
+    }
+  },
+  {
+    "year": 2005,
+    "lea": "110",
+    "district": "Buncombe County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        115,
+        115
+      ],
+      "teachers": [
+        1698,
+        1698
+      ],
+      "professionals": [
+        184,
+        184
+      ],
+      "other_personnel": [
+        1375,
+        1375
+      ],
+      "total_personnel": [
+        3372,
+        3372
+      ],
+      "ADM": [
+        24942,
+        24942
+      ],
+      "total_expenditures": [
+        178421646.0,
+        178421646.0
+      ],
+      "pp_total": [
+        7153.47,
+        7153.47
+      ],
+      "pp_local": [
+        1876.63,
+        1876.63
+      ],
+      "pp_state": [
+        4626.54,
+        4626.54
+      ]
+    }
+  },
+  {
+    "year": 2005,
+    "lea": "150",
+    "district": "Camden County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        14,
+        14
+      ],
+      "teachers": [
+        112,
+        112
+      ],
+      "professionals": [
+        15,
+        15
+      ],
+      "other_personnel": [
+        90,
+        90
+      ],
+      "total_personnel": [
+        231,
+        231
+      ],
+      "ADM": [
+        1662,
+        1662
+      ],
+      "total_expenditures": [
+        12815189.0,
+        12815189.0
+      ],
+      "pp_total": [
+        7710.71,
+        7710.71
+      ],
+      "pp_local": [
+        834.52,
+        834.52
+      ],
+      "pp_state": [
+        6422.81,
+        6422.81
+      ]
+    }
+  },
+  {
+    "year": 2005,
+    "lea": "260",
+    "district": "Cumberland County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        205,
+        205
+      ],
+      "teachers": [
+        3266,
+        3266
+      ],
+      "professionals": [
+        515,
+        515
+      ],
+      "other_personnel": [
+        2461,
+        2461
+      ],
+      "total_personnel": [
+        6447,
+        6447
+      ],
+      "ADM": [
+        51663,
+        51663
+      ],
+      "total_expenditures": [
+        363675792.0,
+        363675792.0
+      ],
+      "pp_total": [
+        7039.39,
+        7039.39
+      ],
+      "pp_local": [
+        1402.77,
+        1402.77
+      ],
+      "pp_state": [
+        4580.45,
+        4580.45
+      ]
+    }
+  },
+  {
+    "year": 2005,
+    "lea": "320",
+    "district": "Durham Public Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        142,
+        142
+      ],
+      "teachers": [
+        1860,
+        1860
+      ],
+      "professionals": [
+        291,
+        291
+      ],
+      "other_personnel": [
+        1448,
+        1448
+      ],
+      "total_personnel": [
+        3741,
+        3741
+      ],
+      "ADM": [
+        30307,
+        30307
+      ],
+      "total_expenditures": [
+        255034984.0,
+        255034984.0
+      ],
+      "pp_total": [
+        8415.06,
+        8415.06
+      ],
+      "pp_local": [
+        2840.74,
+        2840.74
+      ],
+      "pp_state": [
+        4797.44,
+        4797.44
+      ]
+    }
+  },
+  {
+    "year": 2005,
+    "lea": "340",
+    "district": "Winston Salem / Forsyth County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        220,
+        220
+      ],
+      "teachers": [
+        3316,
+        3316
+      ],
+      "professionals": [
+        366,
+        366
+      ],
+      "other_personnel": [
+        1842,
+        1842
+      ],
+      "total_personnel": [
+        5744,
+        5744
+      ],
+      "ADM": [
+        47800,
+        47800
+      ],
+      "total_expenditures": [
+        359081841.0,
+        359081841.0
+      ],
+      "pp_total": [
+        7512.17,
+        7512.17
+      ],
+      "pp_local": [
+        2276.43,
+        2276.43
+      ],
+      "pp_state": [
+        4620.53,
+        4620.53
+      ]
+    }
+  },
+  {
+    "year": 2005,
+    "lea": "360",
+    "district": "Gaston County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        141,
+        141
+      ],
+      "teachers": [
+        1947,
+        1947
+      ],
+      "professionals": [
+        249,
+        249
+      ],
+      "other_personnel": [
+        1130,
+        1130
+      ],
+      "total_personnel": [
+        3467,
+        3467
+      ],
+      "ADM": [
+        31289,
+        31289
+      ],
+      "total_expenditures": [
+        204798667.0,
+        204798667.0
+      ],
+      "pp_total": [
+        6545.39,
+        6545.39
+      ],
+      "pp_local": [
+        1472.22,
+        1472.22
+      ],
+      "pp_state": [
+        4374.64,
+        4374.64
+      ]
+    }
+  },
+  {
+    "year": 2005,
+    "lea": "410",
+    "district": "Guilford County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        257,
+        257
+      ],
+      "teachers": [
+        4444,
+        4444
+      ],
+      "professionals": [
+        808,
+        808
+      ],
+      "other_personnel": [
+        2849,
+        2849
+      ],
+      "total_personnel": [
+        8358,
+        8358
+      ],
+      "ADM": [
+        66367,
+        66367
+      ],
+      "total_expenditures": [
+        500014066.0,
+        500014066.0
+      ],
+      "pp_total": [
+        7534.07,
+        7534.07
+      ],
+      "pp_local": [
+        2378.92,
+        2378.92
+      ],
+      "pp_state": [
+        4471.39,
+        4471.39
+      ]
+    }
+  },
+  {
+    "year": 2005,
+    "lea": "480",
+    "district": "Hyde County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        14,
+        14
+      ],
+      "teachers": [
+        78,
+        78
+      ],
+      "professionals": [
+        17,
+        17
+      ],
+      "other_personnel": [
+        55,
+        55
+      ],
+      "total_personnel": [
+        164,
+        164
+      ],
+      "ADM": [
+        640,
+        640
+      ],
+      "total_expenditures": [
+        9584555.0,
+        9584555.0
+      ],
+      "pp_total": [
+        14975.87,
+        14975.87
+      ],
+      "pp_local": [
+        2809.53,
+        2809.53
+      ],
+      "pp_state": [
+        10424.58,
+        10424.58
+      ]
+    }
+  },
+  {
+    "year": 2005,
+    "lea": "580",
+    "district": "Martin County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        30,
+        30
+      ],
+      "teachers": [
+        331,
+        331
+      ],
+      "professionals": [
+        41,
+        41
+      ],
+      "other_personnel": [
+        232,
+        232
+      ],
+      "total_personnel": [
+        634,
+        634
+      ],
+      "ADM": [
+        4400,
+        4400
+      ],
+      "total_expenditures": [
+        37328110.0,
+        37328110.0
+      ],
+      "pp_total": [
+        8483.65,
+        8483.65
+      ],
+      "pp_local": [
+        1545.71,
+        1545.71
+      ],
+      "pp_state": [
+        5305.15,
+        5305.15
+      ]
+    }
+  },
+  {
+    "year": 2005,
+    "lea": "600",
+    "district": "Charlotte-Mecklenburg Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        572,
+        572
+      ],
+      "teachers": [
+        7890,
+        7890
+      ],
+      "professionals": [
+        1285,
+        1285
+      ],
+      "other_personnel": [
+        5695,
+        5695
+      ],
+      "total_personnel": [
+        15442,
+        15442
+      ],
+      "ADM": [
+        117179,
+        117179
+      ],
+      "total_expenditures": [
+        881255537.0,
+        881255537.0
+      ],
+      "pp_total": [
+        7520.59,
+        7520.59
+      ],
+      "pp_local": [
+        2422.15,
+        2422.15
+      ],
+      "pp_state": [
+        4400.89,
+        4400.89
+      ]
+    }
+  },
+  {
+    "year": 2005,
+    "lea": "670",
+    "district": "Onslow County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        75,
+        75
+      ],
+      "teachers": [
+        1374,
+        1374
+      ],
+      "professionals": [
+        174,
+        174
+      ],
+      "other_personnel": [
+        1138,
+        1138
+      ],
+      "total_personnel": [
+        2761,
+        2761
+      ],
+      "ADM": [
+        21947,
+        21947
+      ],
+      "total_expenditures": [
+        147823388.0,
+        147823388.0
+      ],
+      "pp_total": [
+        6735.48,
+        6735.48
+      ],
+      "pp_local": [
+        1393.28,
+        1393.28
+      ],
+      "pp_state": [
+        4631.19,
+        4631.19
+      ]
+    }
+  },
+  {
+    "year": 2005,
+    "lea": "900",
+    "district": "Union County Public Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        115,
+        115
+      ],
+      "teachers": [
+        1824,
+        1824
+      ],
+      "professionals": [
+        282,
+        282
+      ],
+      "other_personnel": [
+        1232,
+        1232
+      ],
+      "total_personnel": [
+        3453,
+        3453
+      ],
+      "ADM": [
+        28535,
+        28535
+      ],
+      "total_expenditures": [
+        187042601.0,
+        187042601.0
+      ],
+      "pp_total": [
+        6554.85,
+        6554.85
+      ],
+      "pp_local": [
+        1710.02,
+        1710.02
+      ],
+      "pp_state": [
+        4306.48,
+        4306.48
+      ]
+    }
+  },
+  {
+    "year": 2005,
+    "lea": "920",
+    "district": "Wake County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        379,
+        379
+      ],
+      "teachers": [
+        7740,
+        7740
+      ],
+      "professionals": [
+        1216,
+        1216
+      ],
+      "other_personnel": [
+        4944,
+        4944
+      ],
+      "total_personnel": [
+        14279,
+        14279
+      ],
+      "ADM": [
+        113547,
+        113547
+      ],
+      "total_expenditures": [
+        822066865.0,
+        822066865.0
+      ],
+      "pp_total": [
+        7239.87,
+        7239.87
+      ],
+      "pp_local": [
+        2320.12,
+        2320.12
+      ],
+      "pp_state": [
+        4410.93,
+        4410.93
+      ]
+    }
+  },
+  {
+    "year": 2006,
+    "lea": "110",
+    "district": "Buncombe County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        115,
+        115
+      ],
+      "teachers": [
+        1857,
+        1857
+      ],
+      "professionals": [
+        252,
+        252
+      ],
+      "other_personnel": [
+        1358,
+        1358
+      ],
+      "total_personnel": [
+        3582,
+        3582
+      ],
+      "ADM": [
+        25236,
+        25236
+      ],
+      "total_expenditures": [
+        188584877.0,
+        188584877.0
+      ],
+      "pp_total": [
+        7472.85,
+        7472.85
+      ],
+      "pp_local": [
+        1926.14,
+        1926.14
+      ],
+      "pp_state": [
+        4802.49,
+        4802.49
+      ]
+    }
+  },
+  {
+    "year": 2007,
+    "lea": "160",
+    "district": "Carteret County Public Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        37,
+        37
+      ],
+      "teachers": [
+        655,
+        655
+      ],
+      "professionals": [
+        80,
+        80
+      ],
+      "other_personnel": [
+        415,
+        415
+      ],
+      "total_personnel": [
+        1187,
+        1187
+      ],
+      "ADM": [
+        8104,
+        8104
+      ],
+      "total_expenditures": [
+        72844360.0,
+        72844360.0
+      ],
+      "pp_total": [
+        8988.7,
+        8988.7
+      ],
+      "pp_local": [
+        2725.09,
+        2725.09
+      ],
+      "pp_state": [
+        5504.11,
+        5504.11
+      ]
+    }
+  },
+  {
+    "year": 2008,
+    "lea": "210",
+    "district": "Edenton-Chowan Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        26,
+        26
+      ],
+      "teachers": [
+        188,
+        188
+      ],
+      "professionals": [
+        20,
+        20
+      ],
+      "other_personnel": [
+        145,
+        145
+      ],
+      "total_personnel": [
+        379,
+        379
+      ],
+      "ADM": [
+        2399,
+        2399
+      ],
+      "total_expenditures": [
+        24822762.0,
+        24822762.0
+      ],
+      "pp_total": [
+        10347.13,
+        10347.13
+      ],
+      "pp_local": [
+        2133.56,
+        2133.56
+      ],
+      "pp_state": [
+        7126.99,
+        7126.99
+      ]
+    }
+  },
+  {
+    "year": 2009,
+    "lea": "270",
+    "district": "Currituck County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        32,
+        32
+      ],
+      "teachers": [
+        266,
+        266
+      ],
+      "professionals": [
+        44,
+        44
+      ],
+      "other_personnel": [
+        254,
+        254
+      ],
+      "total_personnel": [
+        596,
+        596
+      ],
+      "ADM": [
+        3959,
+        3959
+      ],
+      "total_expenditures": [
+        37485105.0,
+        37485105.0
+      ],
+      "pp_total": [
+        9468.32,
+        9468.32
+      ],
+      "pp_local": [
+        2692.75,
+        2692.75
+      ],
+      "pp_state": [
+        6191.17,
+        6191.17
+      ]
+    }
+  },
+  {
+    "year": 2010,
+    "lea": "320",
+    "district": "Durham Public Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        156,
+        156
+      ],
+      "teachers": [
+        2230,
+        2230
+      ],
+      "professionals": [
+        287,
+        287
+      ],
+      "other_personnel": [
+        1387,
+        1387
+      ],
+      "total_personnel": [
+        4060,
+        4060
+      ],
+      "ADM": [
+        31631,
+        31631
+      ],
+      "total_expenditures": [
+        299039724.0,
+        299039724.0
+      ],
+      "pp_total": [
+        9454.01,
+        9454.01
+      ],
+      "pp_local": [
+        2914.2,
+        2914.2
+      ],
+      "pp_state": [
+        5139.07,
+        5139.07
+      ]
+    }
+  },
+  {
+    "year": 2011,
+    "lea": "390",
+    "district": "Granville County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        52,
+        52
+      ],
+      "teachers": [
+        546,
+        546
+      ],
+      "professionals": [
+        88,
+        88
+      ],
+      "other_personnel": [
+        327,
+        327
+      ],
+      "total_personnel": [
+        1013,
+        1013
+      ],
+      "ADM": [
+        8545,
+        8545
+      ],
+      "total_expenditures": [
+        70739977.0,
+        70739977.0
+      ],
+      "pp_total": [
+        8278.52,
+        8278.52
+      ],
+      "pp_local": [
+        1454.92,
+        1454.92
+      ],
+      "pp_state": [
+        5495.13,
+        5495.13
+      ]
+    }
+  },
+  {
+    "year": 2012,
+    "lea": "440",
+    "district": "Haywood County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        41,
+        41
+      ],
+      "teachers": [
+        535,
+        535
+      ],
+      "professionals": [
+        61,
+        61
+      ],
+      "other_personnel": [
+        352,
+        352
+      ],
+      "total_personnel": [
+        989,
+        989
+      ],
+      "ADM": [
+        7530,
+        7530
+      ],
+      "total_expenditures": [
+        66624420.0,
+        66624420.0
+      ],
+      "pp_total": [
+        8847.87,
+        8847.87
+      ],
+      "pp_local": [
+        2184.78,
+        2184.78
+      ],
+      "pp_state": [
+        5488.97,
+        5488.97
+      ]
+    }
+  },
+  {
+    "year": 2013,
+    "lea": "500",
+    "district": "Jackson County Public Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        32,
+        32
+      ],
+      "teachers": [
+        247,
+        247
+      ],
+      "professionals": [
+        38,
+        38
+      ],
+      "other_personnel": [
+        179,
+        179
+      ],
+      "total_personnel": [
+        496,
+        496
+      ],
+      "ADM": [
+        3580,
+        3580
+      ],
+      "total_expenditures": [
+        32399267.0,
+        32399267.0
+      ],
+      "pp_total": [
+        9050.08,
+        9050.08
+      ],
+      "pp_local": [
+        2027.32,
+        2027.32
+      ],
+      "pp_state": [
+        5832.99,
+        5832.99
+      ]
+    }
+  },
+  {
+    "year": 2014,
+    "lea": "570",
+    "district": "Madison County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        22,
+        22
+      ],
+      "teachers": [
+        185,
+        185
+      ],
+      "professionals": [
+        23,
+        23
+      ],
+      "other_personnel": [
+        149,
+        149
+      ],
+      "total_personnel": [
+        379,
+        379
+      ],
+      "ADM": [
+        2508,
+        2508
+      ],
+      "total_expenditures": [
+        23339255.0,
+        23339255.0
+      ],
+      "pp_total": [
+        9305.92,
+        9305.92
+      ],
+      "pp_local": [
+        1417.44,
+        1417.44
+      ],
+      "pp_state": [
+        6862.63,
+        6862.63
+      ]
+    }
+  },
+  {
+    "year": 2015,
+    "lea": "050",
+    "district": "Ashe County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        24,
+        24
+      ],
+      "teachers": [
+        229,
+        229
+      ],
+      "professionals": [
+        27,
+        27
+      ],
+      "other_personnel": [
+        163,
+        163
+      ],
+      "total_personnel": [
+        443,
+        443
+      ],
+      "ADM": [
+        3096,
+        3096
+      ],
+      "total_expenditures": [
+        30482259.0,
+        30482259.0
+      ],
+      "pp_total": [
+        9845.69,
+        9845.69
+      ],
+      "pp_local": [
+        1888.64,
+        1888.64
+      ],
+      "pp_state": [
+        6809.44,
+        6809.44
+      ]
+    }
+  },
+  {
+    "year": 2015,
+    "lea": "060",
+    "district": "Avery County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        19,
+        19
+      ],
+      "teachers": [
+        181,
+        181
+      ],
+      "professionals": [
+        26,
+        26
+      ],
+      "other_personnel": [
+        149,
+        149
+      ],
+      "total_personnel": [
+        375,
+        375
+      ],
+      "ADM": [
+        2098,
+        2098
+      ],
+      "total_expenditures": [
+        23819042.0,
+        23819042.0
+      ],
+      "pp_total": [
+        11353.22,
+        11353.22
+      ],
+      "pp_local": [
+        2496.33,
+        2496.33
+      ],
+      "pp_state": [
+        7464.28,
+        7464.28
+      ]
+    }
+  },
+  {
+    "year": 2015,
+    "lea": "150",
+    "district": "Camden County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        16,
+        16
+      ],
+      "teachers": [
+        126,
+        126
+      ],
+      "professionals": [
+        19,
+        19
+      ],
+      "other_personnel": [
+        91,
+        91
+      ],
+      "total_personnel": [
+        252,
+        252
+      ],
+      "ADM": [
+        1863,
+        1863
+      ],
+      "total_expenditures": [
+        17151375.0,
+        17151375.0
+      ],
+      "pp_total": [
+        9206.32,
+        9206.32
+      ],
+      "pp_local": [
+        1675.3,
+        1675.3
+      ],
+      "pp_state": [
+        7005.08,
+        7005.08
+      ]
+    }
+  },
+  {
+    "year": 2015,
+    "lea": "260",
+    "district": "Cumberland County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        218,
+        218
+      ],
+      "teachers": [
+        3331,
+        3331
+      ],
+      "professionals": [
+        486,
+        486
+      ],
+      "other_personnel": [
+        2279,
+        2279
+      ],
+      "total_personnel": [
+        6314,
+        6314
+      ],
+      "ADM": [
+        50258,
+        50258
+      ],
+      "total_expenditures": [
+        422459753.0,
+        422459753.0
+      ],
+      "pp_total": [
+        8405.83,
+        8405.83
+      ],
+      "pp_local": [
+        1779.56,
+        1779.56
+      ],
+      "pp_state": [
+        5398.03,
+        5398.03
+      ]
+    }
+  },
+  {
+    "year": 2015,
+    "lea": "340",
+    "district": "Winston Salem / Forsyth County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        211,
+        211
+      ],
+      "teachers": [
+        3507,
+        3507
+      ],
+      "professionals": [
+        728,
+        728
+      ],
+      "other_personnel": [
+        1902,
+        1902
+      ],
+      "total_personnel": [
+        6348,
+        6348
+      ],
+      "ADM": [
+        53648,
+        53648
+      ],
+      "total_expenditures": [
+        476528700.0,
+        476528700.0
+      ],
+      "pp_total": [
+        8882.51,
+        8882.51
+      ],
+      "pp_local": [
+        2303.89,
+        2303.89
+      ],
+      "pp_state": [
+        5519.01,
+        5519.01
+      ]
+    }
+  },
+  {
+    "year": 2015,
+    "lea": "410",
+    "district": "Guilford County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        315,
+        315
+      ],
+      "teachers": [
+        4881,
+        4881
+      ],
+      "professionals": [
+        1006,
+        1006
+      ],
+      "other_personnel": [
+        3188,
+        3188
+      ],
+      "total_personnel": [
+        9390,
+        9390
+      ],
+      "ADM": [
+        71502,
+        71502
+      ],
+      "total_expenditures": [
+        670108220.0,
+        670108220.0
+      ],
+      "pp_total": [
+        9371.88,
+        9371.88
+      ],
+      "pp_local": [
+        2837.23,
+        2837.23
+      ],
+      "pp_state": [
+        5424.88,
+        5424.88
+      ]
+    }
+  },
+  {
+    "year": 2015,
+    "lea": "480",
+    "district": "Hyde County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        8,
+        8
+      ],
+      "teachers": [
+        59,
+        59
+      ],
+      "professionals": [
+        6,
+        6
+      ],
+      "other_personnel": [
+        37,
+        37
+      ],
+      "total_personnel": [
+        110,
+        110
+      ],
+      "ADM": [
+        571,
+        571
+      ],
+      "total_expenditures": [
+        9899791.0,
+        9899791.0
+      ],
+      "pp_total": [
+        17337.64,
+        17337.64
+      ],
+      "pp_local": [
+        2723.07,
+        2723.07
+      ],
+      "pp_state": [
+        12874.21,
+        12874.21
+      ]
+    }
+  },
+  {
+    "year": 2015,
+    "lea": "580",
+    "district": "Martin County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        32,
+        32
+      ],
+      "teachers": [
+        258,
+        258
+      ],
+      "professionals": [
+        41,
+        41
+      ],
+      "other_personnel": [
+        173,
+        173
+      ],
+      "total_personnel": [
+        504,
+        504
+      ],
+      "ADM": [
+        3301,
+        3301
+      ],
+      "total_expenditures": [
+        35640378.0,
+        35640378.0
+      ],
+      "pp_total": [
+        10796.84,
+        10796.84
+      ],
+      "pp_local": [
+        2210.2,
+        2210.2
+      ],
+      "pp_state": [
+        7230.59,
+        7230.59
+      ]
+    }
+  },
+  {
+    "year": 2015,
+    "lea": "600",
+    "district": "Charlotte-Mecklenburg Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        552,
+        552
+      ],
+      "teachers": [
+        8908,
+        8908
+      ],
+      "professionals": [
+        1672,
+        1672
+      ],
+      "other_personnel": [
+        5261,
+        5261
+      ],
+      "total_personnel": [
+        16393,
+        16393
+      ],
+      "ADM": [
+        144497,
+        144497
+      ],
+      "total_expenditures": [
+        1211082898.0,
+        1211082898.0
+      ],
+      "pp_total": [
+        8381.36,
+        8381.36
+      ],
+      "pp_local": [
+        2325.66,
+        2325.66
+      ],
+      "pp_state": [
+        5065.57,
+        5065.57
+      ]
+    }
+  },
+  {
+    "year": 2015,
+    "lea": "640",
+    "district": "Nash County Public Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        92,
+        92
+      ],
+      "teachers": [
+        919,
+        919
+      ],
+      "professionals": [
+        143,
+        143
+      ],
+      "other_personnel": [
+        552,
+        552
+      ],
+      "total_personnel": [
+        1706,
+        1706
+      ],
+      "ADM": [
+        15703,
+        15703
+      ],
+      "total_expenditures": [
+        134663658.0,
+        134663658.0
+      ],
+      "pp_total": [
+        8575.66,
+        8575.66
+      ],
+      "pp_local": [
+        1670.75,
+        1670.75
+      ],
+      "pp_state": [
+        5865.57,
+        5865.57
+      ]
+    }
+  },
+  {
+    "year": 2015,
+    "lea": "920",
+    "district": "Wake County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        514,
+        514
+      ],
+      "teachers": [
+        10480,
+        10480
+      ],
+      "professionals": [
+        1430,
+        1430
+      ],
+      "other_personnel": [
+        5607,
+        5607
+      ],
+      "total_personnel": [
+        18031,
+        18031
+      ],
+      "ADM": [
+        153488,
+        153488
+      ],
+      "total_expenditures": [
+        1283602558.0,
+        1283602558.0
+      ],
+      "pp_total": [
+        8362.9,
+        8362.9
+      ],
+      "pp_local": [
+        2411.95,
+        2411.95
+      ],
+      "pp_state": [
+        5302.89,
+        5302.89
+      ]
+    }
+  },
+  {
+    "year": 2016,
+    "lea": "700",
+    "district": "Elizabeth City-Pasquotank Public Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        24,
+        24
+      ],
+      "teachers": [
+        395,
+        395
+      ],
+      "professionals": [
+        69,
+        69
+      ],
+      "other_personnel": [
+        231,
+        231
+      ],
+      "total_personnel": [
+        719,
+        719
+      ],
+      "ADM": [
+        5739,
+        5739
+      ],
+      "total_expenditures": [
+        53638119.0,
+        53638119.0
+      ],
+      "pp_total": [
+        9346.25,
+        9346.25
+      ],
+      "pp_local": [
+        1971.82,
+        1971.82
+      ],
+      "pp_state": [
+        6188.79,
+        6188.79
+      ]
+    }
+  },
+  {
+    "year": 2025,
+    "lea": "030",
+    "district": "Alleghany County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        15,
+        15
+      ],
+      "teachers": [
+        103,
+        103
+      ],
+      "professionals": [
+        20,
+        20
+      ],
+      "other_personnel": [
+        63,
+        63
+      ],
+      "total_personnel": [
+        201,
+        201
+      ],
+      "ADM": [
+        1258,
+        1258
+      ],
+      "total_expenditures": [
+        20261951.0,
+        20261951.0
+      ],
+      "pp_total": [
+        16106.48,
+        16106.48
+      ],
+      "pp_local": [
+        2916.06,
+        2916.06
+      ],
+      "pp_state": [
+        11418.38,
+        11418.38
+      ]
+    }
+  },
+  {
+    "year": 2025,
+    "lea": "050",
+    "district": "Ashe County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        27,
+        27
+      ],
+      "teachers": [
+        192,
+        192
+      ],
+      "professionals": [
+        39,
+        39
+      ],
+      "other_personnel": [
+        143,
+        143
+      ],
+      "total_personnel": [
+        401,
+        401
+      ],
+      "ADM": [
+        2546,
+        2546
+      ],
+      "total_expenditures": [
+        38358386.0,
+        38358386.0
+      ],
+      "pp_total": [
+        15066.14,
+        15066.14
+      ],
+      "pp_local": [
+        3052.1,
+        3052.1
+      ],
+      "pp_state": [
+        10136.13,
+        10136.13
+      ]
+    }
+  },
+  {
+    "year": 2025,
+    "lea": "060",
+    "district": "Avery County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        19,
+        19
+      ],
+      "teachers": [
+        149,
+        149
+      ],
+      "professionals": [
+        34,
+        34
+      ],
+      "other_personnel": [
+        141,
+        141
+      ],
+      "total_personnel": [
+        343,
+        343
+      ],
+      "ADM": [
+        1659,
+        1659
+      ],
+      "total_expenditures": [
+        27975712.0,
+        27975712.0
+      ],
+      "pp_total": [
+        16863.0,
+        16863.0
+      ],
+      "pp_local": [
+        4099.19,
+        4099.19
+      ],
+      "pp_state": [
+        11201.2,
+        11201.2
+      ]
+    }
+  },
+  {
+    "year": 2025,
+    "lea": "090",
+    "district": "Bladen County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        40,
+        40
+      ],
+      "teachers": [
+        259,
+        259
+      ],
+      "professionals": [
+        46,
+        46
+      ],
+      "other_personnel": [
+        202,
+        202
+      ],
+      "total_personnel": [
+        547,
+        547
+      ],
+      "ADM": [
+        3804,
+        3804
+      ],
+      "total_expenditures": [
+        57545979.0,
+        57545979.0
+      ],
+      "pp_total": [
+        15127.75,
+        15127.75
+      ],
+      "pp_local": [
+        2756.77,
+        2756.77
+      ],
+      "pp_state": [
+        9642.3,
+        9642.3
+      ]
+    }
+  },
+  {
+    "year": 2025,
+    "lea": "110",
+    "district": "Buncombe County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        117,
+        117
+      ],
+      "teachers": [
+        1518,
+        1518
+      ],
+      "professionals": [
+        314,
+        314
+      ],
+      "other_personnel": [
+        958,
+        958
+      ],
+      "total_personnel": [
+        2907,
+        2907
+      ],
+      "ADM": [
+        21674,
+        21674
+      ],
+      "total_expenditures": [
+        294564718.0,
+        294564718.0
+      ],
+      "pp_total": [
+        13590.69,
+        13590.69
+      ],
+      "pp_local": [
+        3945.08,
+        3945.08
+      ],
+      "pp_state": [
+        8144.29,
+        8144.29
+      ]
+    }
+  },
+  {
+    "year": 2025,
+    "lea": "150",
+    "district": "Camden County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        21,
+        21
+      ],
+      "teachers": [
+        137,
+        137
+      ],
+      "professionals": [
+        26,
+        26
+      ],
+      "other_personnel": [
+        77,
+        77
+      ],
+      "total_personnel": [
+        261,
+        261
+      ],
+      "ADM": [
+        1892,
+        1892
+      ],
+      "total_expenditures": [
+        26105164.0,
+        26105164.0
+      ],
+      "pp_total": [
+        13797.66,
+        13797.66
+      ],
+      "pp_local": [
+        2433.41,
+        2433.41
+      ],
+      "pp_state": [
+        10871.87,
+        10871.87
+      ]
+    }
+  },
+  {
+    "year": 2025,
+    "lea": "220",
+    "district": "Clay County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        19,
+        19
+      ],
+      "teachers": [
+        100,
+        100
+      ],
+      "professionals": [
+        12,
+        12
+      ],
+      "other_personnel": [
+        73,
+        73
+      ],
+      "total_personnel": [
+        204,
+        204
+      ],
+      "ADM": [
+        1245,
+        1245
+      ],
+      "total_expenditures": [
+        19101438.0,
+        19101438.0
+      ],
+      "pp_total": [
+        15342.52,
+        15342.52
+      ],
+      "pp_local": [
+        2956.91,
+        2956.91
+      ],
+      "pp_state": [
+        11042.4,
+        11042.4
+      ]
+    }
+  },
+  {
+    "year": 2025,
+    "lea": "260",
+    "district": "Cumberland County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        223,
+        223
+      ],
+      "teachers": [
+        2780,
+        2780
+      ],
+      "professionals": [
+        561,
+        561
+      ],
+      "other_personnel": [
+        2241,
+        2241
+      ],
+      "total_personnel": [
+        5805,
+        5805
+      ],
+      "ADM": [
+        47840,
+        47840
+      ],
+      "total_expenditures": [
+        584527956.0,
+        584527956.0
+      ],
+      "pp_total": [
+        12218.39,
+        12218.39
+      ],
+      "pp_local": [
+        2382.82,
+        2382.82
+      ],
+      "pp_state": [
+        7996.1,
+        7996.1
+      ]
+    }
+  },
+  {
+    "year": 2025,
+    "lea": "300",
+    "district": "Davie County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        39,
+        39
+      ],
+      "teachers": [
+        418,
+        418
+      ],
+      "professionals": [
+        68,
+        68
+      ],
+      "other_personnel": [
+        188,
+        188
+      ],
+      "total_personnel": [
+        713,
+        713
+      ],
+      "ADM": [
+        5924,
+        5924
+      ],
+      "total_expenditures": [
+        71492255.0,
+        71492255.0
+      ],
+      "pp_total": [
+        12068.24,
+        12068.24
+      ],
+      "pp_local": [
+        2897.34,
+        2897.34
+      ],
+      "pp_state": [
+        8212.08,
+        8212.08
+      ]
+    }
+  },
+  {
+    "year": 2025,
+    "lea": "320",
+    "district": "Durham Public Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        195,
+        195
+      ],
+      "teachers": [
+        1827,
+        1827
+      ],
+      "professionals": [
+        511,
+        511
+      ],
+      "other_personnel": [
+        1762,
+        1762
+      ],
+      "total_personnel": [
+        4295,
+        4295
+      ],
+      "ADM": [
+        30722,
+        30722
+      ],
+      "total_expenditures": [
+        473000650.0,
+        473000650.0
+      ],
+      "pp_total": [
+        15396.15,
+        15396.15
+      ],
+      "pp_local": [
+        6022.07,
+        6022.07
+      ],
+      "pp_state": [
+        7851.51,
+        7851.51
+      ]
+    }
+  },
+  {
+    "year": 2025,
+    "lea": "340",
+    "district": "Winston Salem / Forsyth County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        268,
+        268
+      ],
+      "teachers": [
+        3407,
+        3407
+      ],
+      "professionals": [
+        848,
+        848
+      ],
+      "other_personnel": [
+        2260,
+        2260
+      ],
+      "total_personnel": [
+        6783,
+        6783
+      ],
+      "ADM": [
+        50105,
+        50105
+      ],
+      "total_expenditures": [
+        681605688.0,
+        681605688.0
+      ],
+      "pp_total": [
+        13603.55,
+        13603.55
+      ],
+      "pp_local": [
+        3902.03,
+        3902.03
+      ],
+      "pp_state": [
+        7893.91,
+        7893.91
+      ]
+    }
+  },
+  {
+    "year": 2025,
+    "lea": "360",
+    "district": "Gaston County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        210,
+        210
+      ],
+      "teachers": [
+        1964,
+        1964
+      ],
+      "professionals": [
+        375,
+        375
+      ],
+      "other_personnel": [
+        1125,
+        1125
+      ],
+      "total_personnel": [
+        3674,
+        3674
+      ],
+      "ADM": [
+        30347,
+        30347
+      ],
+      "total_expenditures": [
+        383673242.0,
+        383673242.0
+      ],
+      "pp_total": [
+        12642.87,
+        12642.87
+      ],
+      "pp_local": [
+        3564.02,
+        3564.02
+      ],
+      "pp_state": [
+        7789.44,
+        7789.44
+      ]
+    }
+  },
+  {
+    "year": 2025,
+    "lea": "370",
+    "district": "Gates County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        19,
+        19
+      ],
+      "teachers": [
+        93,
+        93
+      ],
+      "professionals": [
+        17,
+        17
+      ],
+      "other_personnel": [
+        70,
+        70
+      ],
+      "total_personnel": [
+        199,
+        199
+      ],
+      "ADM": [
+        1347,
+        1347
+      ],
+      "total_expenditures": [
+        22287061.0,
+        22287061.0
+      ],
+      "pp_total": [
+        16545.7,
+        16545.7
+      ],
+      "pp_local": [
+        3615.57,
+        3615.57
+      ],
+      "pp_state": [
+        11680.63,
+        11680.63
+      ]
+    }
+  },
+  {
+    "year": 2025,
+    "lea": "400",
+    "district": "Greene County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        37,
+        37
+      ],
+      "teachers": [
+        200,
+        200
+      ],
+      "professionals": [
+        41,
+        41
+      ],
+      "other_personnel": [
+        105,
+        105
+      ],
+      "total_personnel": [
+        383,
+        383
+      ],
+      "ADM": [
+        2686,
+        2686
+      ],
+      "total_expenditures": [
+        40972818.0,
+        40972818.0
+      ],
+      "pp_total": [
+        15254.21,
+        15254.21
+      ],
+      "pp_local": [
+        1501.09,
+        1501.09
+      ],
+      "pp_state": [
+        11137.41,
+        11137.41
+      ]
+    }
+  },
+  {
+    "year": 2025,
+    "lea": "410",
+    "district": "Guilford County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        348,
+        348
+      ],
+      "teachers": [
+        4850,
+        4850
+      ],
+      "professionals": [
+        1047,
+        1047
+      ],
+      "other_personnel": [
+        2911,
+        2911
+      ],
+      "total_personnel": [
+        9156,
+        9156
+      ],
+      "ADM": [
+        65633,
+        65633
+      ],
+      "total_expenditures": [
+        903936140.0,
+        903936140.0
+      ],
+      "pp_total": [
+        13772.59,
+        13772.59
+      ],
+      "pp_local": [
+        4050.38,
+        4050.38
+      ],
+      "pp_state": [
+        7984.54,
+        7984.54
+      ]
+    }
+  },
+  {
+    "year": 2025,
+    "lea": "440",
+    "district": "Haywood County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        41,
+        41
+      ],
+      "teachers": [
+        438,
+        438
+      ],
+      "professionals": [
+        69,
+        69
+      ],
+      "other_personnel": [
+        279,
+        279
+      ],
+      "total_personnel": [
+        827,
+        827
+      ],
+      "ADM": [
+        6602,
+        6602
+      ],
+      "total_expenditures": [
+        84562498.0,
+        84562498.0
+      ],
+      "pp_total": [
+        12808.62,
+        12808.62
+      ],
+      "pp_local": [
+        2822.7,
+        2822.7
+      ],
+      "pp_state": [
+        8115.49,
+        8115.49
+      ]
+    }
+  },
+  {
+    "year": 2025,
+    "lea": "460",
+    "district": "Hertford County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        28,
+        28
+      ],
+      "teachers": [
+        152,
+        152
+      ],
+      "professionals": [
+        24,
+        24
+      ],
+      "other_personnel": [
+        217,
+        217
+      ],
+      "total_personnel": [
+        421,
+        421
+      ],
+      "ADM": [
+        2178,
+        2178
+      ],
+      "total_expenditures": [
+        36265762.0,
+        36265762.0
+      ],
+      "pp_total": [
+        16650.95,
+        16650.95
+      ],
+      "pp_local": [
+        2364.31,
+        2364.31
+      ],
+      "pp_state": [
+        11564.26,
+        11564.26
+      ]
+    }
+  },
+  {
+    "year": 2025,
+    "lea": "480",
+    "district": "Hyde County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        10,
+        10
+      ],
+      "teachers": [
+        45,
+        45
+      ],
+      "professionals": [
+        9,
+        9
+      ],
+      "other_personnel": [
+        29,
+        29
+      ],
+      "total_personnel": [
+        93,
+        93
+      ],
+      "ADM": [
+        434,
+        434
+      ],
+      "total_expenditures": [
+        11733448.0,
+        11733448.0
+      ],
+      "pp_total": [
+        27035.59,
+        27035.59
+      ],
+      "pp_local": [
+        3852.64,
+        3852.64
+      ],
+      "pp_state": [
+        20430.66,
+        20430.66
+      ]
+    }
+  },
+  {
+    "year": 2025,
+    "lea": "580",
+    "district": "Martin County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        31,
+        31
+      ],
+      "teachers": [
+        166,
+        166
+      ],
+      "professionals": [
+        58,
+        58
+      ],
+      "other_personnel": [
+        136,
+        136
+      ],
+      "total_personnel": [
+        391,
+        391
+      ],
+      "ADM": [
+        2518,
+        2518
+      ],
+      "total_expenditures": [
+        41285784.0,
+        41285784.0
+      ],
+      "pp_total": [
+        16396.26,
+        16396.26
+      ],
+      "pp_local": [
+        2241.68,
+        2241.68
+      ],
+      "pp_state": [
+        10875.83,
+        10875.83
+      ]
+    }
+  },
+  {
+    "year": 2025,
+    "lea": "600",
+    "district": "Charlotte-Mecklenburg Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        635,
+        635
+      ],
+      "teachers": [
+        9616,
+        9616
+      ],
+      "professionals": [
+        1804,
+        1804
+      ],
+      "other_personnel": [
+        5332,
+        5332
+      ],
+      "total_personnel": [
+        17387,
+        17387
+      ],
+      "ADM": [
+        140801,
+        140801
+      ],
+      "total_expenditures": [
+        1870910845.0,
+        1870910845.0
+      ],
+      "pp_total": [
+        13287.62,
+        13287.62
+      ],
+      "pp_local": [
+        4360.08,
+        4360.08
+      ],
+      "pp_state": [
+        7648.94,
+        7648.94
+      ]
+    }
+  },
+  {
+    "year": 2025,
+    "lea": "660",
+    "district": "Northampton County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        20,
+        20
+      ],
+      "teachers": [
+        89,
+        89
+      ],
+      "professionals": [
+        20,
+        20
+      ],
+      "other_personnel": [
+        73,
+        73
+      ],
+      "total_personnel": [
+        202,
+        202
+      ],
+      "ADM": [
+        1156,
+        1156
+      ],
+      "total_expenditures": [
+        26077178.0,
+        26077178.0
+      ],
+      "pp_total": [
+        22558.11,
+        22558.11
+      ],
+      "pp_local": [
+        4483.13,
+        4483.13
+      ],
+      "pp_state": [
+        13781.94,
+        13781.94
+      ]
+    }
+  },
+  {
+    "year": 2025,
+    "lea": "670",
+    "district": "Onslow County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        97,
+        97
+      ],
+      "teachers": [
+        1722,
+        1722
+      ],
+      "professionals": [
+        321,
+        321
+      ],
+      "other_personnel": [
+        1280,
+        1280
+      ],
+      "total_personnel": [
+        3420,
+        3420
+      ],
+      "ADM": [
+        26703,
+        26703
+      ],
+      "total_expenditures": [
+        334492042.0,
+        334492042.0
+      ],
+      "pp_total": [
+        12526.38,
+        12526.38
+      ],
+      "pp_local": [
+        3292.57,
+        3292.57
+      ],
+      "pp_state": [
+        7755.15,
+        7755.15
+      ]
+    }
+  },
+  {
+    "year": 2025,
+    "lea": "860",
+    "district": "Surry County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        49,
+        49
+      ],
+      "teachers": [
+        464,
+        464
+      ],
+      "professionals": [
+        72,
+        72
+      ],
+      "other_personnel": [
+        317,
+        317
+      ],
+      "total_personnel": [
+        902,
+        902
+      ],
+      "ADM": [
+        7062,
+        7062
+      ],
+      "total_expenditures": [
+        89035686.0,
+        89035686.0
+      ],
+      "pp_total": [
+        12607.72,
+        12607.72
+      ],
+      "pp_local": [
+        2027.69,
+        2027.69
+      ],
+      "pp_state": [
+        8794.1,
+        8794.1
+      ]
+    }
+  },
+  {
+    "year": 2025,
+    "lea": "870",
+    "district": "Swain County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        26,
+        26
+      ],
+      "teachers": [
+        123,
+        123
+      ],
+      "professionals": [
+        24,
+        24
+      ],
+      "other_personnel": [
+        99,
+        99
+      ],
+      "total_personnel": [
+        272,
+        272
+      ],
+      "ADM": [
+        1786,
+        1786
+      ],
+      "total_expenditures": [
+        28435064.0,
+        28435064.0
+      ],
+      "pp_total": [
+        15921.09,
+        15921.09
+      ],
+      "pp_local": [
+        3227.75,
+        3227.75
+      ],
+      "pp_state": [
+        10279.7,
+        10279.7
+      ]
+    }
+  },
+  {
+    "year": 2025,
+    "lea": "890",
+    "district": "Tyrrell County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        11,
+        11
+      ],
+      "teachers": [
+        39,
+        39
+      ],
+      "professionals": [
+        9,
+        9
+      ],
+      "other_personnel": [
+        31,
+        31
+      ],
+      "total_personnel": [
+        90,
+        90
+      ],
+      "ADM": [
+        433,
+        433
+      ],
+      "total_expenditures": [
+        10678292.0,
+        10678292.0
+      ],
+      "pp_total": [
+        24661.18,
+        24661.18
+      ],
+      "pp_local": [
+        2380.77,
+        2380.77
+      ],
+      "pp_state": [
+        18403.19,
+        18403.19
+      ]
+    }
+  },
+  {
+    "year": 2025,
+    "lea": "900",
+    "district": "Union County Public Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        188,
+        188
+      ],
+      "teachers": [
+        2361,
+        2361
+      ],
+      "professionals": [
+        496,
+        496
+      ],
+      "other_personnel": [
+        1922,
+        1922
+      ],
+      "total_personnel": [
+        4967,
+        4967
+      ],
+      "ADM": [
+        40644,
+        40644
+      ],
+      "total_expenditures": [
+        454488468.0,
+        454488468.0
+      ],
+      "pp_total": [
+        11182.18,
+        11182.18
+      ],
+      "pp_local": [
+        3347.35,
+        3347.35
+      ],
+      "pp_state": [
+        7206.51,
+        7206.51
+      ]
+    }
+  },
+  {
+    "year": 2025,
+    "lea": "910",
+    "district": "Vance County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        52,
+        52
+      ],
+      "teachers": [
+        329,
+        329
+      ],
+      "professionals": [
+        70,
+        70
+      ],
+      "other_personnel": [
+        292,
+        292
+      ],
+      "total_personnel": [
+        743,
+        743
+      ],
+      "ADM": [
+        4913,
+        4913
+      ],
+      "total_expenditures": [
+        73098289.0,
+        73098289.0
+      ],
+      "pp_total": [
+        14878.54,
+        14878.54
+      ],
+      "pp_local": [
+        2114.94,
+        2114.94
+      ],
+      "pp_state": [
+        10637.92,
+        10637.92
+      ]
+    }
+  },
+  {
+    "year": 2025,
+    "lea": "920",
+    "district": "Wake County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        670,
+        670
+      ],
+      "teachers": [
+        10820,
+        10820
+      ],
+      "professionals": [
+        3160,
+        3160
+      ],
+      "other_personnel": [
+        5313,
+        5313
+      ],
+      "total_personnel": [
+        19963,
+        19963
+      ],
+      "ADM": [
+        160489,
+        160489
+      ],
+      "total_expenditures": [
+        2010715871.0,
+        2010715871.0
+      ],
+      "pp_total": [
+        12528.68,
+        12528.68
+      ],
+      "pp_local": [
+        4310.23,
+        4310.23
+      ],
+      "pp_state": [
+        7466.0,
+        7466.0
+      ]
+    }
+  },
+  {
+    "year": 2025,
+    "lea": "930",
+    "district": "Warren County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        29,
+        29
+      ],
+      "teachers": [
+        116,
+        116
+      ],
+      "professionals": [
+        28,
+        28
+      ],
+      "other_personnel": [
+        100,
+        100
+      ],
+      "total_personnel": [
+        273,
+        273
+      ],
+      "ADM": [
+        1475,
+        1475
+      ],
+      "total_expenditures": [
+        30972770.0,
+        30972770.0
+      ],
+      "pp_total": [
+        20998.49,
+        20998.49
+      ],
+      "pp_local": [
+        4942.7,
+        4942.7
+      ],
+      "pp_state": [
+        12927.38,
+        12927.38
+      ]
+    }
+  },
+  {
+    "year": 2025,
+    "lea": "970",
+    "district": "Wilkes County Schools",
+    "status": "OK",
+    "checks": {
+      "administrators": [
+        52,
+        52
+      ],
+      "teachers": [
+        574,
+        574
+      ],
+      "professionals": [
+        124,
+        124
+      ],
+      "other_personnel": [
+        447,
+        447
+      ],
+      "total_personnel": [
+        1197,
+        1197
+      ],
+      "ADM": [
+        8095,
+        8095
+      ],
+      "total_expenditures": [
+        111474809.0,
+        111474809.0
+      ],
+      "pp_total": [
+        13770.82,
+        13770.82
+      ],
+      "pp_local": [
+        2489.73,
+        2489.73
+      ],
+      "pp_state": [
+        8927.72,
+        8927.72
+      ]
+    }
+  }
+]
