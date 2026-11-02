@@ -65,20 +65,6 @@
       <ol id="rankList" class="rank-list"></ol>
     </section>
 
-    <details class="about">
-      <summary>About the data</summary>
-      <div class="about-body">
-        <p><strong>Enrollment</strong> is final ADM. <strong>Spending</strong> is Table A7 current
-        expenditures by source of funds; per-pupil figures are rounded to the nearest dollar.
-        <strong>Staffing</strong> is Table A6 total positions funded from all sources.</p>
-        <p>The NCDPI year code is the school year's ending year, which is also the state fiscal
-        year: FY2025 = 2024&ndash;25.</p>
-        <p>State + local + federal per-pupil differs from the total by up to $1 because each
-        component is rounded independently.</p>
-        <p><a href="data/ncdpi_osp_30districts_fy2005_2025.csv" download>Download the data (CSV, 630 rows)</a></p>
-      </div>
-    </details>
-
   </aside>
 
   <section class="stage" aria-label="Map and time controls">
@@ -122,12 +108,23 @@
 </main>
 
 <footer class="foot">
-  <p>
-    Source: NC Department of Public Instruction, Statistical Profile, Tables A6 and A7.
-    District boundaries: U.S. Census Bureau TIGER/Line 2024. Grey areas are North Carolina
-    districts outside the 30-district study panel.
-  </p>
-  <p class="muted">Figures are as published by NCDPI and may be revised in later releases.</p>
+  <details class="about">
+    <summary>About the data</summary>
+    <div class="about-body">
+      <p><strong>Enrollment</strong> is final ADM. <strong>Spending</strong> is Table A7 current
+      expenditures by source of funds; per-pupil figures are rounded to the nearest dollar.
+      <strong>Staffing</strong> is Table A6 total positions funded from all sources.</p>
+      <p>The NCDPI year code is the school year's ending year, which is also the state fiscal
+      year: FY2025 = 2024&ndash;25.</p>
+      <p>State + local + federal per-pupil differs from the total by up to $1 because each
+      component is rounded independently.</p>
+      <p>Source: NC Department of Public Instruction, Statistical Profile, Tables A6 and A7.
+      District boundaries: U.S. Census Bureau TIGER/Line 2024. Grey areas are North Carolina
+      districts outside the 30-district study panel.</p>
+      <p><a href="data/ncdpi_osp_30districts_fy2005_2025.csv" download>Download the data (CSV, 630 rows)</a></p>
+    </div>
+  </details>
+  <p class="muted">NCDPI Statistical Profile (Tables A6 &amp; A7) &middot; TIGER/Line 2024 boundaries &middot; Figures as published, subject to revision</p>
 </footer>
 
 <script src="assets/vendor/leaflet.js"></script>
