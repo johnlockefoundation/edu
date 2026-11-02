@@ -64,6 +64,17 @@
 
   const $ = (id) => document.getElementById(id);
 
+  function groupAvg(group, year, metric) {
+    const vals = DISTRICTS.filter((d) => d.group === group)
+      .map((d) => valueFor(d.lea, year, metric))
+      .filter((v) => v !== null && Number.isFinite(v));
+    return vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : null;
+  }
+
+  function groupSeries(group, metric) {
+    return YEARS.map((y) => ({ y, v: groupAvg(group, y, metric) }));
+  }
+
   function valueFor(lea, year, metric) {
     const rec = VALS[lea] && VALS[lea][year];
     return rec ? metric.get(rec) : null;
@@ -289,6 +300,17 @@
     $("statGrid").innerHTML = stats
       .map(([k, val]) => `<div><dt>${k}</dt><dd>${val}</dd></div>`).join("");
 
+    const gAvg = groupAvg(d.group, state.year, state.metric);
+    const gEl = $("groupAvg");
+    if (gAvg !== null) {
+      gEl.hidden = false;
+      gEl.innerHTML = `<strong>${d.group} average:</strong> ${state.metric.fmt(gAvg)}`
+        + ` &nbsp;&middot;&nbsp; this district is ${state.metric.fmt(v)}`
+        + ` (${(v > gAvg ? "above" : v < gAvg ? "below" : "at") } avg)`;
+    } else {
+      gEl.hidden = true;
+    }
+
     renderChart(lea);
   }
 
@@ -302,19 +324,24 @@
       v: VALS[lea][y] ? state.metric.get(VALS[lea][y]) : null,
     })).filter((p) => p.v !== null);
 
-    const W = 300, H = 104, top = 8, bottom = 88;
-    const vals = series.map((p) => p.v);
-    let lo = Math.min(...vals), hi = Math.max(...vals);
+    const gSeries = groupSeries(BY_LEA[lea].group, state.metric)
+      .filter((p) => p.v !== null);
+
+    const W = 300, H = 120, top = 10, bottom = 92;
+    const allVals = [...series.map((p) => p.v), ...gSeries.map((p) => p.v)];
+    let lo = Math.min(...allVals), hi = Math.max(...allVals);
     if (hi === lo) { hi += 1; lo -= 1; }
-    const pad = (hi - lo) * 0.12;
+    const pad = (hi - lo) * 0.1;
     lo -= pad; hi += pad;
     const x = (y) => ((y - 2005) / 20) * W;
     const yv = (v) => bottom - ((v - lo) / (hi - lo)) * (bottom - top);
 
     const line = series.map((p) => `${x(p.y).toFixed(1)},${yv(p.v).toFixed(1)}`).join(" ");
+    const gLine = gSeries.map((p) => `${x(p.y).toFixed(1)},${yv(p.v).toFixed(1)}`).join(" ");
     const area = `M0,${bottom} L${line.split(" ").join(" L")} L${W},${bottom} Z`;
     const cur = series.find((p) => p.y === state.year);
     const first = series[0], last = series[series.length - 1];
+    const gFirst = gSeries[0], gLast = gSeries[gSeries.length - 1];
 
     const dot = cur
       ? `<line x1="${x(state.year)}" y1="${top}" x2="${x(state.year)}" y2="${bottom}"
@@ -333,16 +360,25 @@
           </linearGradient>
         </defs>
         <path d="${area}" fill="url(#g)"/>
+        <polyline points="${gLine}" fill="none" stroke="#9aa9b5" stroke-width="1.4"
+                  stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="4 3"/>
         <polyline points="${line}" fill="none" stroke="#0d6b8a" stroke-width="1.8"
                   stroke-linejoin="round" stroke-linecap="round"/>
         ${dot}
-        <text x="0" y="101" font-size="9" fill="#6b7d8b">2005</text>
-        <text x="${W}" y="101" font-size="9" fill="#6b7d8b" text-anchor="end">2025</text>
-      </svg>`;
+        <text x="0" y="${H - 2}" font-size="9" fill="#6b7d8b">2005</text>
+        <text x="${W}" y="${H - 2}" font-size="9" fill="#6b7d8b" text-anchor="end">2025</text>
+      </svg>
+      <p class="chart-note">
+        <span style="color:#0d6b8a">\u2501</span> ${BY_LEA[lea].name}
+        &nbsp;&middot;&nbsp;
+        <span style="color:#9aa9b5">\u2509</span> ${BY_LEA[lea].group} avg
+        &nbsp;&middot;&nbsp;
+        ${state.metric.fmt(first.v)} \u2192 ${state.metric.fmt(last.v)}
+      </p>`;
 
     $("trendTitle").textContent =
-      `${state.metric.short}: ${state.metric.fmt(first.v)} (FY2005) \u2192 ` +
-      `${state.metric.fmt(last.v)} (FY2025)`;
+      `${state.metric.short}: ${state.metric.fmt(first.v)} \u2192 ${state.metric.fmt(last.v)}` +
+      ` (group avg ${state.metric.fmt(gFirst.v)} \u2192 ${state.metric.fmt(gLast.v)})`;
   }
 
   /* ---------- timeline ---------- */
