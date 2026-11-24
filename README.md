@@ -9,6 +9,7 @@ workflow and add the student-outcome endpoint needed for the epidemiological ana
 **Finance deliverable: 30 districts × 21 fiscal years (FY2005–FY2025) = 630 rows, no gaps.**
 **Outcomes deliverable: the same 30 districts, 2025–26, with 40 student subgroups and
 54,990 district-level disaggregated rows, plus a one-row-per-district merged analysis file.**
+**ROI: cost per proficient student** in the merged file and a third map view.
 The 30 districts are the study panel supplied by Bob (10 large / 10 medium / 10 small by
 OSP recipient count).
 
@@ -118,6 +119,28 @@ selector use a curated set of 19 (ALL, EDS/NOT_EDS, SWD/NOT_SWD, ELS/NOT_ELS, ra
 sex, AIG/NOT_AIG, HMS, MIL). Not every small district has every subgroup — 535 of the
 expected 570 district × subgroup cells are reported.
 
+## Return on investment (ROI)
+
+ROI is defined as **cost per proficient student**:
+
+```
+cpp_<subgroup> = FY2025 total per-pupil spending / (2025-26 pct_glp_<subgroup> / 100)
+```
+
+It answers "how many FY2025 dollars were spent for each student who reached grade-level
+proficiency in 2025–26?" Lower is better. The merged file has one `cpp_` column for each
+of the 19 curated subgroups, including `cpp_ALL`; all are whole dollars, and they are
+blank where GLP is masked or zero. Across the 30 districts, `cpp_ALL` runs from
+$15,152 (Union) to $62,494. The site's ROI view uses the same formula, reverses the
+color scale and ranking so the best value appears first, and keeps the student-group
+selector so the comparison can be repeated for any group.
+
+This is an **efficiency ratio, not a causal estimate**. It divides one cross-sectional
+spending measure by one cross-sectional outcome measure one year later; it does not
+control for student need, district size, baseline achievement, or the timing of spending.
+It is most useful for comparing groups or districts within the study panel, and least
+useful for small subgroups where GLP is masked.
+
 ## Validation performed
 
 * **67 district-years** re-fetched from the live per-record pages (109/113) and compared
@@ -141,7 +164,7 @@ data/validation_summary_full.json             # coverage/integrity counts (finan
 data/validation_live_sample.json              # live page-vs-dataset spot checks
 data/disag_2025_26_30districts_tidy.csv       # 54,990 rows — all PSU disaggregations
 data/disag_2025_26_30districts_headline.csv   # 30 rows — ALL/ALL/ALL/ALL + subgroup GLP/CCR
-data/osp_outcomes_merged_30districts.csv      # 30 rows — FY2025 finance + 2025-26 outcomes
+data/osp_outcomes_merged_30districts.csv      # 30 rows — FY2025 finance + 2025-26 outcomes + ROI
 data/osp_outcomes_merged_30districts.xlsx     # + data_dictionary and validation sheets
 data/validation_outcomes.json                 # outcomes coverage/masking/integrity log
 config/districts.csv                          # the 30 districts + group + selected flag
@@ -154,8 +177,9 @@ The merged file is the analysis-ready endpoint: one row per district with OSP gr
 FY2025 finance and personnel, 2025–26 GLP/CCR/achievement-level outcomes for all 30
 districts and the curated subgroups, plus six disparity gaps
 (`glp_gap_eds`, `glp_gap_swd`, `glp_gap_race` and their `ccr_` counterparts, computed as
-advantaged minus disadvantaged in percentage points). Five districts lack at least one
-gap because a comparison subgroup is suppressed or absent.
+advantaged minus disadvantaged in percentage points) and 19 cost-per-proficient-student
+columns (`cpp_ALL` and 18 subgroup variants). Five districts lack at least one gap
+because a comparison subgroup is suppressed or absent.
 
 Study extract columns:
 
@@ -211,7 +235,7 @@ headless server).
 ## Interactive map
 
 A companion interactive map is published at **https://johnlockefoundation.github.io/edu**:
-a Leaflet choropleth of the 30 study districts with two modes.
+a Leaflet choropleth of the 30 study districts with three modes.
 
 * **Finance & staffing** (default) — fiscal-year slider FY2005–FY2025, 15 metrics,
   district-level trend chart with a dashed group-average overlay, and ranking.
@@ -219,10 +243,13 @@ a Leaflet choropleth of the 30 study districts with two modes.
   levels 3–5, with a student-group selector (19 groups) that recolors the map, ranking
   and group average. Selecting a district shows a subgroup breakdown bar chart. The
   timeline and fixed scale are hidden because there is only one outcome period.
+* **ROI** — cost per proficient student, using the same student-group selector. The
+  ranking is ascending (best value first), the color scale is reversed so dark = low
+  cost = better, and the detail card shows the underlying spending and GLP.
 
-Both modes share the group chips, search, and the selected-district detail card, and all
-state is URL-serialized (`#mode=outcomes&m=glp&sg=EDS&g=Small&d=480`). The site is built
-entirely from the files in `docs/data/`; it runs with no external APIs or tile basemap.
+All three modes share the group chips, search, and the selected-district detail card, and
+all state is URL-serialized (`#mode=roi&sg=EDS&g=Small&d=480`). The site is built entirely
+from the files in `docs/data/`; it runs with no external APIs or tile basemap.
 To rebuild it locally:
 
 ```bash
@@ -250,4 +277,5 @@ cd docs && python -m http.server 8765
   require a research design; the merged file is an analysis input, not a result.
 * Outcome percentages are published by NCDPI with masking applied; suppressed cells are
   blank, not zero. Group averages on the site are unweighted means of district values,
-  not student-weighted pooled rates.
+  not student-weighted pooled rates. ROI group averages are likewise unweighted means
+  of district ratios, not a pooled district-wide ratio.

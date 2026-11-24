@@ -66,6 +66,14 @@
       hint: "Percent at level 5. Suppressed where fewer than 5 or more than 95 percent.", get: (v) => v.pct_l5 },
   ];
 
+  // ROI = FY2025 total per-pupil spending divided by the share of students
+  // reaching grade-level proficiency in 2025-26. Lower cost is better.
+  const ROI_METRICS = [
+    { id: "cpp", label: "Cost per proficient student", short: "Cost / proficient", fmt: usd,
+      mode: "roi", lowerIsBetter: true,
+      hint: "FY2025 total per-pupil spending divided by (2025–26 GLP / 100). Lower is better." },
+  ];
+
   const SUBGROUP_LABELS = {
     ALL: "All students", EDS: "Economically disadvantaged", NOT_EDS: "Not economically disadvantaged",
     SWD: "Students with disabilities", NOT_SWD: "Not students with disabilities",
@@ -91,6 +99,7 @@
   let LEA_LAYER = new Map();
   let DOMAIN = new Map(); // metric id (+ subgroup) -> {min,max,breaks}
   let OUTCOMES = {};      // lea -> subgroup -> record
+  let FIN_2025 = {};      // lea -> FY2025 finance record
   let SUBGROUPS = [];
   let hoverLea = null;
 
@@ -99,11 +108,25 @@
   const $ = (id) => document.getElementById(id);
 
   function activeMetrics() {
-    return state.mode === "outcomes" ? OUTCOME_METRICS : METRICS;
+    if (state.mode === "outcomes") return OUTCOME_METRICS;
+    if (state.mode === "roi") return ROI_METRICS;
+    return METRICS;
   }
 
   function periodLabel() {
-    return state.mode === "outcomes" ? "2025\u201326" : "FY" + state.year;
+    if (state.mode === "outcomes") return "2025\u201326";
+    if (state.mode === "roi") return "FY2025 \u2192 2025\u201326";
+    return "FY" + state.year;
+  }
+
+  function usesOutcomes() {
+    return state.mode === "outcomes" || state.mode === "roi";
+  }
+
+  function roiFor(lea, rec) {
+    const pp = FIN_2025[lea];
+    if (!rec || rec.pct_glp === null || !(rec.pct_glp > 0) || !pp) return null;
+    return (pp.total_per_pupil * 100) / rec.pct_glp;
   }
 
   function groupAvg(group, year, metric) {
@@ -122,12 +145,15 @@
       const rec = OUTCOMES[lea] && OUTCOMES[lea][state.subgroup];
       return rec ? metric.get(rec) : null;
     }
+    if (metric.mode === "roi") {
+      return roiFor(lea, OUTCOMES[lea] && OUTCOMES[lea][state.subgroup]);
+    }
     const rec = VALS[lea] && VALS[lea][year];
     return rec ? metric.get(rec) : null;
   }
 
   function recordFor(lea) {
-    if (state.mode === "outcomes") {
+    if (usesOutcomes()) {
       return (OUTCOMES[lea] && OUTCOMES[lea][state.subgroup]) || null;
     }
     return (VALS[lea] && VALS[lea][state.year]) || null;
@@ -139,7 +165,7 @@
 
   function scaleFor(metric) {
     const key = metric.id + "|" + state.scale + (state.scale === "year" ? "|" + state.year : "")
-      + (metric.mode === "outcomes" ? "|" + state.subgroup : "");
+      + (usesOutcomes() ? "|" + state.subgroup : "");
     if (DOMAIN.has(key)) return DOMAIN.get(key);
 
     const vals = [];
@@ -161,7 +187,7 @@
     } else {
       for (let i = 1; i < 7; i++) breaks.push(vals[Math.floor((vals.length * i) / 7)]);
     }
-    const out = { min, max, breaks };
+    const out = { min, max, breaks, reverse: !!metric.lowerIsBetter };
     DOMAIN.set(key, out);
     return out;
   }
@@ -170,7 +196,8 @@
     if (v === null) return "#f1f4f6";
     let i = 0;
     while (i < d.breaks.length && v >= d.breaks[i]) i++;
-    return PALETTE[i];
+    // For cost-style metrics, dark = low cost = better.
+    return d.reverse ? PALETTE[PALETTE.length - 1 - i] : PALETTE[i];
   }
 
   function visible(d) {
@@ -204,7 +231,7 @@
     const f = layer.feature.properties;
     const v = valueFor(f.lea, state.year, state.metric);
     const shown = v === null ? "\u2014" : state.metric.fmt(v);
-    const sub = state.mode === "outcomes" ? ` &middot; ${SUBGROUP_LABELS[state.subgroup]}` : "";
+    const sub = usesOutcomes() ? ` &middot; ${SUBGROUP_LABELS[state.subgroup]}` : "";
     return `<b>${f.name}</b><span>${state.metric.short}, ${periodLabel()}${sub}</span><br>` +
       `<em>${shown}</em> <span>${f.group}</span>`;
   }
@@ -262,11 +289,14 @@
   function renderLegend() {
     const d = scaleFor(state.metric);
     const strip = $("legendStrip");
-    strip.innerHTML = PALETTE.map((c) => `<i style="background:${c}"></i>`).join("");
+    const palette = d.reverse ? PALETTE.slice().reverse() : PALETTE;
+    strip.innerHTML = palette.map((c) => `<i style="background:${c}"></i>`).join("");
     $("legendTitle").textContent = state.metric.label;
-    $("legendNote").textContent = state.mode === "outcomes"
-      ? `${periodLabel()} \u00b7 ${SUBGROUP_LABELS[state.subgroup]}`
-      : (state.scale === "year" ? `relative to FY${state.year}` : "fixed across all years");
+    $("legendNote").textContent = state.mode === "roi"
+      ? `${periodLabel()} \u00b7 ${SUBGROUP_LABELS[state.subgroup]} \u00b7 lower is better`
+      : state.mode === "outcomes"
+        ? `${periodLabel()} \u00b7 ${SUBGROUP_LABELS[state.subgroup]}`
+        : (state.scale === "year" ? `relative to FY${state.year}` : "fixed across all years");
     $("legendMin").textContent = state.metric.fmt(d.min);
     $("legendMax").textContent = state.metric.fmt(d.max);
   }
@@ -275,26 +305,32 @@
 
   function renderRanking() {
     const list = $("rankList");
+    const rev = scaleFor(state.metric).reverse;
     const rows = filtered()
       .map((d) => ({ d, v: valueFor(d.lea, state.year, state.metric) }))
-      .filter((r) => r.v !== null)
-      .sort((a, b) => b.v - a.v);
+      .filter((r) => r.v !== null && Number.isFinite(r.v))
+      .sort((a, b) => rev ? a.v - b.v : b.v - a.v);
 
     $("rankYear").textContent = periodLabel();
     if (!rows.length) {
       list.innerHTML = `<li class="rank-empty">No districts match.</li>`;
       return;
     }
-    const max = rows[0].v || 1;
-    list.innerHTML = rows.map((r, i) => `
+    const best = rows[0].v || 1;
+    list.innerHTML = rows.map((r, i) => {
+      const width = rev
+        ? Math.max(2, Math.min(100, (best / r.v) * 100))
+        : Math.max(2, (r.v / best) * 100);
+      return `
       <li>
         <button class="rank-item${r.d.lea === state.selected ? " is-sel" : ""}" data-lea="${r.d.lea}">
           <span class="rank-num">${i + 1}</span>
           <span class="rank-name">${r.d.name}</span>
           <span class="rank-val">${state.metric.fmt(r.v)}</span>
-          <span class="rank-bar"><i style="width:${Math.max(2, (r.v / max) * 100)}%"></i></span>
+          <span class="rank-bar"><i style="width:${width}%"></i></span>
         </button>
-      </li>`).join("");
+      </li>`;
+    }).join("");
   }
 
   /* ---------- detail ---------- */
@@ -328,7 +364,7 @@
     const d = BY_LEA[lea];
     const rec = recordFor(lea);
     if (!rec) { closeDetail(); return; }
-    const v = state.metric.get(rec);
+    const v = valueFor(lea, state.year, state.metric);
     const rows = filtered()
       .map((x) => valueFor(x.lea, state.year, state.metric))
       .filter((x) => x !== null)
@@ -338,29 +374,33 @@
     $("detailName").textContent = d.name;
     $("detailGroup").textContent = d.group;
     $("detailLea").textContent = "LEA " + lea
-      + (state.mode === "outcomes" ? ` \u00b7 ${SUBGROUP_LABELS[state.subgroup]}` : "");
+      + (usesOutcomes() ? ` \u00b7 ${SUBGROUP_LABELS[state.subgroup]}` : "");
     $("detailValue").textContent = v === null ? "\u2014" : state.metric.fmt(v);
     $("detailMetric").textContent = state.metric.label + ", " + periodLabel();
     $("detailRank").textContent = v === null ? "suppressed" : `#${rows.indexOf(v) + 1} of ${rows.length}`;
 
-    const stats = state.mode === "outcomes"
-      ? outcomeStats(rec)
-      : financeStats(rec);
+    const stats = state.mode === "roi" ? roiStats(rec, lea)
+      : state.mode === "outcomes" ? outcomeStats(rec)
+        : financeStats(rec);
     $("statGrid").innerHTML = stats
       .map(([k, val]) => `<div><dt>${k}</dt><dd>${val}</dd></div>`).join("");
 
     const gAvg = groupAvg(d.group, state.year, state.metric);
     const gEl = $("groupAvg");
     if (gAvg !== null && v !== null) {
+      const cmp = v > gAvg ? "above" : v < gAvg ? "below" : "at";
+      const quality = state.mode === "roi"
+        ? (cmp === "below" ? " · better value" : cmp === "above" ? " · worse value" : "")
+        : "";
       gEl.hidden = false;
       gEl.innerHTML = `<strong>${d.group} average:</strong> ${state.metric.fmt(gAvg)}`
         + ` &nbsp;&middot;&nbsp; this district is ${state.metric.fmt(v)}`
-        + ` (${(v > gAvg ? "above" : v < gAvg ? "below" : "at") } avg)`;
+        + ` (${cmp} avg${quality})`;
     } else {
       gEl.hidden = true;
     }
 
-    if (state.mode === "outcomes") renderOutcomeChart(lea);
+    if (usesOutcomes()) renderSubgroupChart(lea);
     else renderChart(lea);
   }
 
@@ -391,31 +431,53 @@
     ];
   }
 
+  function roiStats(rec, lea) {
+    const show = (v) => v === null ? "suppressed" : pct(v);
+    const fin = FIN_2025[lea] || {};
+    const cost = roiFor(lea, rec);
+    return [
+      ["Spend / pupil, FY25", fin.total_per_pupil ? usd(fin.total_per_pupil) : "\u2014"],
+      ["Proficient (GLP)", show(rec.pct_glp)],
+      ["Cost / proficient", cost === null ? "\u2014" : usd(cost)],
+      ["Students tested", int(rec.num_tested)],
+      ["College/career ready", show(rec.pct_ccr)],
+      ["Not proficient", show(rec.pct_notprof)],
+    ];
+  }
+
   function closeDetail() {
     $("detail").hidden = true;
   }
 
-  function renderOutcomeChart(lea) {
+  function renderSubgroupChart(lea) {
+    const roi = state.mode === "roi";
     const field = state.metric.field;
-    const rows = CHART_SUBGROUPS
-      .map((sg) => ({ sg, rec: OUTCOMES[lea] && OUTCOMES[lea][sg] }))
-      .filter((r) => r.rec && r.rec[field] !== null)
-      .map((r) => ({ sg: r.sg, v: r.rec[field] }));
+    const rows = CHART_SUBGROUPS.map((sg) => {
+      const rec = OUTCOMES[lea] && OUTCOMES[lea][sg];
+      if (!rec) return null;
+      const v = roi ? roiFor(lea, rec) : (field ? rec[field] : null);
+      return v === null || !Number.isFinite(v) ? null : { sg, v };
+    }).filter(Boolean);
 
     $("trendTitle").textContent = `Subgroup breakdown \u00b7 ${periodLabel()}`;
     if (!rows.length) {
       $("chart").innerHTML = `<p class="chart-note">No reported values for this measure.</p>`;
       return;
     }
+    const max = Math.max(...rows.map((r) => r.v)) || 1;
+    const fmt = roi ? usd : state.metric.fmt;
     $("chart").innerHTML = `<div class="sub-bars" role="img" aria-label="${state.metric.label} by student group, ${periodLabel()}">`
       + rows.map((r) => `
         <div class="sub-row${r.sg === state.subgroup ? " is-cur" : ""}">
           <span class="sub-label" title="${SUBGROUP_LABELS[r.sg] || r.sg}">${SUBGROUP_LABELS[r.sg] || r.sg}</span>
-          <span class="sub-track"><i style="width:${Math.max(0, Math.min(100, r.v))}%"></i></span>
-          <span class="sub-val">${state.metric.fmt(r.v)}</span>
+          <span class="sub-track"><i style="width:${Math.max(2, Math.min(100, (r.v / max) * 100))}%"></i></span>
+          <span class="sub-val">${fmt(r.v)}</span>
         </div>`).join("")
-      + `</div><p class="chart-note">Bars show ${state.metric.short.toLowerCase()} for each student group; `
-      + `the highlighted row is the group selected on the map.</p>`;
+      + `</div><p class="chart-note">`
+      + (roi
+        ? "Bars show cost per proficient student for each group; longer bars cost more. "
+        : `Bars show ${state.metric.short.toLowerCase()} for each student group. `)
+      + `The highlighted row is the group selected on the map.</p>`;
   }
 
   function renderChart(lea) {
@@ -497,7 +559,7 @@
 
   let timer = null;
   function togglePlay() {
-    if (state.mode === "outcomes") return;
+    if (state.mode !== "finance") return;
     const btn = $("play");
     if (timer) {
       clearInterval(timer); timer = null;
@@ -518,7 +580,7 @@
   /* ---------- data mode ---------- */
 
   function applyMode() {
-    const out = state.mode === "outcomes";
+    const out = usesOutcomes();
     document.querySelectorAll(".mode-btn").forEach((b) => {
       const on = b.dataset.mode === state.mode;
       b.classList.toggle("is-on", on);
@@ -532,8 +594,10 @@
     $("subgroupField").hidden = !out;
     $("timeline").hidden = out;
     document.querySelector(".legend-scale").hidden = out;
-    $("yearLabel").textContent = out ? "Outcomes" : "FY" + state.year;
-    $("syLabel").textContent = out ? "2025\u201326" : schoolYear(state.year);
+    $("yearLabel").textContent = state.mode === "roi" ? "ROI"
+      : state.mode === "outcomes" ? "Outcomes" : "FY" + state.year;
+    $("syLabel").textContent = state.mode === "roi" ? "FY2025 \u2192 2025\u201326"
+      : state.mode === "outcomes" ? "2025\u201326" : schoolYear(state.year);
 
     const sel = $("metric");
     sel.innerHTML = activeMetrics().map((m) => `<option value="${m.id}">${m.label}</option>`).join("");
@@ -555,7 +619,8 @@
     if (mode === state.mode) return;
     if (timer) togglePlay();
     state.mode = mode;
-    state.metric = mode === "outcomes" ? OUTCOME_METRICS[0] : METRICS[0];
+    state.metric = mode === "outcomes" ? OUTCOME_METRICS[0]
+      : mode === "roi" ? ROI_METRICS[0] : METRICS[0];
     state.subgroup = "ALL";
     state.scale = "year";
     DOMAIN.clear();
@@ -578,7 +643,7 @@
       `mode=${state.mode}`, `y=${state.year}`, `m=${state.metric.id}`,
       `g=${state.group}`, `s=${state.scale}`,
     ];
-    if (state.mode === "outcomes") parts.push(`sg=${state.subgroup}`);
+    if (usesOutcomes()) parts.push(`sg=${state.subgroup}`);
     if (state.selected) parts.push(`d=${state.selected}`);
     try {
       history.replaceState(null, "", "#" + parts.join("&"));
@@ -588,17 +653,18 @@
   function readHash() {
     const h = new URLSearchParams(location.hash.replace(/^#/, ""));
     const mode = h.get("mode");
-    if (mode === "outcomes" || mode === "finance") state.mode = mode;
+    if (["finance", "outcomes", "roi"].includes(mode)) state.mode = mode;
     const m = activeMetrics().find((x) => x.id === h.get("m"));
     if (m) state.metric = m;
-    else state.metric = state.mode === "outcomes" ? OUTCOME_METRICS[0] : METRICS[0];
+    else state.metric = state.mode === "outcomes" ? OUTCOME_METRICS[0]
+      : state.mode === "roi" ? ROI_METRICS[0] : METRICS[0];
     const y = Number(h.get("y"));
     if (y >= 2005 && y <= 2025) state.year = y;
     const g = h.get("g");
     if (["all", "Large", "Medium", "Small"].includes(g)) state.group = g;
     const sc = h.get("s");
     if (sc === "fixed" || sc === "year") state.scale = sc;
-    if (state.mode === "outcomes") {
+    if (usesOutcomes()) {
       state.scale = "year";
       const sg = h.get("sg");
       if (sg && SUBGROUPS.includes(sg)) state.subgroup = sg;
@@ -751,6 +817,7 @@
       const rec = {};
       panel.fields.forEach((f) => { rec[f] = row[idx[f]]; });
       (VALS[lea] = VALS[lea] || {})[year] = rec;
+      if (year === 2025) FIN_2025[lea] = rec;
     });
 
     DISTRICTS = panel.districts;

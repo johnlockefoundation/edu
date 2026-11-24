@@ -23,6 +23,7 @@ from __future__ import annotations
 import json
 import shutil
 from datetime import datetime, timezone
+from decimal import Decimal, ROUND_HALF_UP
 from pathlib import Path
 
 import numpy as np
@@ -79,6 +80,8 @@ FIELD_DEFINITIONS = {
     "ccr_gap_eds": "NOT_EDS minus EDS college-and-career readiness (percentage points)",
     "ccr_gap_swd": "NOT_SWD minus SWD college-and-career readiness (percentage points)",
     "ccr_gap_race": "WHTE minus BLCK college-and-career readiness (percentage points)",
+    "cpp_ALL": "Cost per proficient student, all students: FY2025 total per-pupil spending divided by (2025-26 GLP / 100). Lower is better.",
+    "cpp_<sub>": "Cost per proficient student for subgroup <sub>, using FY2025 total per-pupil spending and 2025-26 GLP. Lower is better.",
     "fiscal_year_finance": "Latest finance year in the study panel (FY2025 = 2024-25)",
     "school_year_outcomes": "School year of the outcome measurement (2025-26)",
     "source_a7": "NCDPI Statistical Profile Table A7 provenance (expenditures)",
@@ -235,6 +238,24 @@ def build() -> dict:
                 merged[f"{measure}_{high}"] - merged[f"{measure}_{low}"]
             ).round(1)
 
+    # ROI: dollars of FY2025 total per-pupil spending per student reaching
+    # grade-level proficiency in 2025-26. Lower is better. Use Bob's half-up
+    # rule (the same as Math.round in the site), not pandas' banker's rounding.
+    def half_up_dollars(x: float) -> int:
+        return int(Decimal(str(x)).quantize(Decimal("1"), rounding=ROUND_HALF_UP))
+
+    for sg in SITE_SUBGROUPS:
+        glp = merged[f"glp_{sg}"]
+        raw = merged["total_per_pupil"] * 100 / glp
+        merged[f"cpp_{sg}"] = pd.Series(
+            [
+                half_up_dollars(v) if pd.notna(v) and pd.notna(g) and g > 0 else pd.NA
+                for v, g in zip(raw, glp)
+            ],
+            index=merged.index,
+            dtype="Int64",
+        )
+
     merged.insert(3, "fiscal_year_finance", 2025)
     merged.insert(4, "school_year_outcomes", SCHOOL_YEAR)
     merged["source_finance"] = fin["source_a7"].iloc[0] + " || " + fin["source_a6"].iloc[0]
@@ -276,6 +297,11 @@ def build() -> dict:
         "duplicate_headline_keys": int(
             headline.duplicated(subset=["lea_code", "school_year"]).sum()
         ),
+        "roi_definition": "cpp_<sub> = FY2025 total per-pupil spending / (2025-26 pct_glp for subgroup / 100), i.e. dollars spent per student reaching grade-level proficiency. Lower is better. Blank where GLP is masked or zero.",
+        "cpp_all_range": [
+            int(merged["cpp_ALL"].min()), int(merged["cpp_ALL"].max())
+        ],
+        "cpp_column_count": len(SITE_SUBGROUPS),
         "avg_score_note": "avg_score is only reported for subject-specific regular assessments; it is blank at ALL subjects/grades and is therefore excluded from the headline metrics.",
         "masking_note": "NCDPI suppresses percentages below 5 or above 95. Masked cells are blank in numeric columns and recorded as column:token in the 'masked' field.",
     }
@@ -297,6 +323,8 @@ def build() -> dict:
             return FIELD_DEFINITIONS["glp_<sub>"].replace("<sub>", col[4:])
         if col.startswith("ccr_") and col[4:] in SITE_SUBGROUPS:
             return FIELD_DEFINITIONS["ccr_<sub>"].replace("<sub>", col[4:])
+        if col.startswith("cpp_") and col[4:] in SITE_SUBGROUPS:
+            return FIELD_DEFINITIONS["cpp_<sub>"].replace("<sub>", col[4:])
         return "Derived analysis field"
 
     with pd.ExcelWriter(OUT_XLSX, engine="openpyxl") as writer:

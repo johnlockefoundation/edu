@@ -1,5 +1,5 @@
 {
-  "retrieved_at": "2026-11-24T01:54:27Z",
+  "retrieved_at": "2026-11-24T02:07:09Z",
   "school_year": "2025-26",
   "raw_file": "Disag_2025-26_Data.txt",
   "raw_file_bytes": 158961971,
@@ -73,6 +73,12 @@
   "headline_missing_districts": [],
   "finance_missing_districts": [],
   "duplicate_headline_keys": 0,
+  "roi_definition": "cpp_<sub> = FY2025 total per-pupil spending / (2025-26 pct_glp for subgroup / 100), i.e. dollars spent per student reaching grade-level proficiency. Lower is better. Blank where GLP is masked or zero.",
+  "cpp_all_range": [
+    15152,
+    62494
+  ],
+  "cpp_column_count": 19,
   "avg_score_note": "avg_score is only reported for subject-specific regular assessments; it is blank at ALL subjects/grades and is therefore excluded from the headline metrics.",
   "masking_note": "NCDPI suppresses percentages below 5 or above 95. Masked cells are blank in numeric columns and recorded as column:token in the 'masked' field."
 }
