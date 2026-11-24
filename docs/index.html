@@ -14,7 +14,7 @@
 <header class="topbar">
   <div class="titles">
     <h1>North Carolina School District Finance Explorer</h1>
-    <p>30 districts &middot; 21 fiscal years &middot; NCDPI Statistical Profile, Tables A6 &amp; A7</p>
+    <p>30 districts &middot; finance FY2005&ndash;FY2025 &middot; outcomes 2025&ndash;26</p>
   </div>
   <div class="year-badge" aria-live="polite">
     <span id="yearLabel">FY2025</span>
@@ -27,9 +27,23 @@
   <aside class="panel" aria-label="Controls and rankings">
 
     <div class="field">
+      <span class="label">Explore</span>
+      <div class="chips" role="group" aria-label="Choose data mode">
+        <button class="chip is-on mode-btn" data-mode="finance" aria-pressed="true">Finance &amp; staffing</button>
+        <button class="chip mode-btn" data-mode="outcomes" aria-pressed="false">Student outcomes</button>
+      </div>
+    </div>
+
+    <div class="field">
       <label for="metric">Measure</label>
       <select id="metric"></select>
       <p class="hint" id="metricHint"></p>
+    </div>
+
+    <div class="field" id="subgroupField" hidden>
+      <label for="subgroup">Student group</label>
+      <select id="subgroup"></select>
+      <p class="hint">Outcomes are suppressed for groups smaller than 5 students.</p>
     </div>
 
     <div class="field">
@@ -87,12 +101,12 @@
       <dl class="stat-grid" id="statGrid"></dl>
       <p class="group-avg" id="groupAvg" hidden></p>
       <figure class="trend">
-        <figcaption><span id="trendTitle">Trend, FY2005–FY2025</span></figcaption>
+        <figcaption><span id="trendTitle">Trend, FY2005&ndash;FY2025</span></figcaption>
         <div id="chart"></div>
       </figure>
     </article>
 
-    <div class="timeline">
+    <div class="timeline" id="timeline">
       <button id="play" class="play" aria-label="Play through years" aria-pressed="false">
         <svg viewBox="0 0 16 16" aria-hidden="true"><path id="playIcon" d="M4 2.5v11l9-5.5z"/></svg>
       </button>
@@ -112,20 +126,23 @@
   <details class="about">
     <summary>About the data</summary>
     <div class="about-body">
-      <p><strong>Enrollment</strong> is final ADM. <strong>Spending</strong> is Table A7 current
-      expenditures by source of funds; per-pupil figures are rounded to the nearest dollar.
-      <strong>Staffing</strong> is Table A6 total positions funded from all sources.</p>
-      <p>The NCDPI year code is the school year's ending year, which is also the state fiscal
-      year: FY2025 = 2024&ndash;25.</p>
+      <p><strong>Finance &amp; staffing</strong>: enrollment is final ADM; spending is Table A7
+      current expenditures by funding source, with per-pupil figures rounded half up; staffing
+      is Table A6 total positions. The NCDPI year code is the school year's ending year and the
+      state fiscal year: FY2025 = 2024&ndash;25.</p>
+      <p><strong>Student outcomes</strong>: 2025&ndash;26 End-of-Grade and End-of-Course results
+      at the district (Public School Unit) level. <em>Proficient</em> is achievement level 3 or
+      above (GLP); <em>college &amp; career ready</em> is levels 4 and 5 (CCR). Figures cover all
+      subjects, grades and assessment types for the selected student group. NCDPI suppresses
+      percentages below 5 or above 95; suppressed cells are left blank.</p>
       <p>State + local + federal per-pupil differs from the total by up to $1 because each
-      component is rounded independently.</p>
-      <p>Source: NC Department of Public Instruction, Statistical Profile, Tables A6 and A7.
-      District boundaries: U.S. Census Bureau TIGER/Line 2024. Grey areas are North Carolina
-      districts outside the 30-district study panel.</p>
-      <p><a href="data/ncdpi_osp_30districts_fy2005_2025.csv" download>Download the data (CSV, 630 rows)</a></p>
+      component is rounded independently. District boundaries: U.S. Census Bureau TIGER/Line
+      2024; grey areas are North Carolina districts outside the 30-district study panel.</p>
+      <p><a href="data/ncdpi_osp_30districts_fy2005_2025.csv" download>Finance panel (CSV, 630 rows)</a>
+      &middot; <a href="data/osp_outcomes_merged_30districts.csv" download>Finance + outcomes, merged (CSV, 30 rows)</a></p>
     </div>
   </details>
-  <p class="muted">NCDPI Statistical Profile (Tables A6 &amp; A7) &middot; TIGER/Line 2024 boundaries &middot; Figures as published, subject to revision</p>
+  <p class="muted">NCDPI Statistical Profile (A6/A7) &amp; 2025&ndash;26 Disaggregated Performance &middot; TIGER/Line 2024 boundaries &middot; Figures as published, subject to revision</p>
 </footer>
 
 <script src="assets/vendor/leaflet.js"></script>

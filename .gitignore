@@ -9,6 +9,9 @@ __pycache__/
 build/
 /tmp/
 
+# large raw outcome source (159 MB, kept locally; derived outputs are committed)
+Disag_2025-26/
+
 # OS
 .DS_Store
 Thumbs.db

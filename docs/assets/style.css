@@ -20,6 +20,8 @@
 
 * { box-sizing: border-box; }
 
+[hidden] { display: none !important; }
+
 html, body { height: 100%; }
 
 body {
@@ -463,6 +465,42 @@ input[type="range"]:focus-visible { outline: 2px solid var(--accent); outline-of
 #chart svg { display: block; width: 100%; height: auto; overflow: visible; }
 
 .chart-note { font-size: 10.5px; color: var(--muted); margin: 2px 0 0; }
+
+/* subgroup breakdown bars (outcomes mode) */
+.sub-bars { display: flex; flex-direction: column; gap: 5px; padding: 4px 0 6px; }
+.sub-row {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr) 42px;
+  align-items: center;
+  gap: 7px;
+  font-size: 10.5px;
+  color: var(--ink-soft);
+}
+.sub-row.is-cur .sub-label { color: var(--accent-ink); font-weight: 700; }
+.sub-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sub-track {
+  display: block;
+  height: 8px;
+  border-radius: 4px;
+  background: #edf2f5;
+  overflow: hidden;
+}
+.sub-track > i {
+  display: block;
+  height: 100%;
+  border-radius: 4px;
+  background: #9dc4d5;
+}
+.sub-row.is-cur .sub-track > i { background: var(--accent); }
+.sub-val {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
 
 .group-avg {
   margin: 0 0 10px;

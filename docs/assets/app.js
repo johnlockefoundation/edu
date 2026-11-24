@@ -1,5 +1,6 @@
-/* NC School District Finance Explorer
-   Data: NCDPI Statistical Profile (Tables A6/A7), 30-district OSP panel. */
+/* NC School District Explorer
+   Data: NCDPI Statistical Profile (Tables A6/A7) and 2025-26 disaggregated
+   EOG/EOC performance, 30-district OSP panel. */
 
 (() => {
   "use strict";
@@ -48,7 +49,38 @@
       hint: "Enrollment divided by teacher positions.", get: (v) => v.adm / v.total_teachers },
   ];
 
-  const state = { metric: METRICS[0], year: 2025, group: "all", q: "", selected: null, scale: "year" };
+  // 2025-26 outcome metrics, all taken from the ALL subjects / ALL grades /
+  // ALL assessment types cell for the selected student group.
+  const OUTCOME_METRICS = [
+    { id: "glp", label: "Grade-level proficient", short: "Proficient", fmt: pct, mode: "outcomes", field: "pct_glp",
+      hint: "Achievement level 3 or above (GLP), all subjects and grades, 2025–26.", get: (v) => v.pct_glp },
+    { id: "ccr", label: "College & career ready", short: "College/career ready", fmt: pct, mode: "outcomes", field: "pct_ccr",
+      hint: "Achievement levels 4 and 5 (CCR), all subjects and grades, 2025–26.", get: (v) => v.pct_ccr },
+    { id: "nprof", label: "Not proficient", short: "Not proficient", fmt: pct, mode: "outcomes", field: "pct_notprof",
+      hint: "Achievement levels 1 and 2, all subjects and grades, 2025–26.", get: (v) => v.pct_notprof },
+    { id: "l3", label: "Achievement level 3", short: "Level 3", fmt: pct, mode: "outcomes", field: "pct_l3",
+      hint: "Percent at level 3, all subjects and grades, 2025–26.", get: (v) => v.pct_l3 },
+    { id: "l4", label: "Achievement level 4", short: "Level 4", fmt: pct, mode: "outcomes", field: "pct_l4",
+      hint: "Percent at level 4, all subjects and grades, 2025–26.", get: (v) => v.pct_l4 },
+    { id: "l5", label: "Achievement level 5", short: "Level 5", fmt: pct, mode: "outcomes", field: "pct_l5",
+      hint: "Percent at level 5. Suppressed where fewer than 5 or more than 95 percent.", get: (v) => v.pct_l5 },
+  ];
+
+  const SUBGROUP_LABELS = {
+    ALL: "All students", EDS: "Economically disadvantaged", NOT_EDS: "Not economically disadvantaged",
+    SWD: "Students with disabilities", NOT_SWD: "Not students with disabilities",
+    ELS: "English learners", NOT_ELS: "Not English learners",
+    AMIN: "American Indian", ASIA: "Asian", BLCK: "Black", HISP: "Hispanic", WHTE: "White",
+    MULT: "Two or more races", FEM: "Female", MALE: "Male",
+    AIG: "Academically gifted", NOT_AIG: "Not academically gifted",
+    HMS: "Homeless", MIL: "Military connected",
+  };
+  const CHART_SUBGROUPS = ["ALL", "EDS", "NOT_EDS", "SWD", "NOT_SWD", "ELS", "NOT_ELS", "BLCK", "HISP", "WHTE"];
+
+  const state = {
+    metric: METRICS[0], year: 2025, group: "all", q: "", selected: null,
+    scale: "year", mode: "finance", subgroup: "ALL",
+  };
 
   let VALS = {};          // lea -> year -> record
   let DISTRICTS = [];     // [{lea,name,group}]
@@ -57,12 +89,22 @@
   let MAP = null;
   let LAYER = null;
   let LEA_LAYER = new Map();
-  let DOMAIN = new Map(); // metric id -> {min,max,breaks}
+  let DOMAIN = new Map(); // metric id (+ subgroup) -> {min,max,breaks}
+  let OUTCOMES = {};      // lea -> subgroup -> record
+  let SUBGROUPS = [];
   let hoverLea = null;
 
   /* ---------- helpers ---------- */
 
   const $ = (id) => document.getElementById(id);
+
+  function activeMetrics() {
+    return state.mode === "outcomes" ? OUTCOME_METRICS : METRICS;
+  }
+
+  function periodLabel() {
+    return state.mode === "outcomes" ? "2025\u201326" : "FY" + state.year;
+  }
 
   function groupAvg(group, year, metric) {
     const vals = DISTRICTS.filter((d) => d.group === group)
@@ -76,8 +118,19 @@
   }
 
   function valueFor(lea, year, metric) {
+    if (metric.mode === "outcomes") {
+      const rec = OUTCOMES[lea] && OUTCOMES[lea][state.subgroup];
+      return rec ? metric.get(rec) : null;
+    }
     const rec = VALS[lea] && VALS[lea][year];
     return rec ? metric.get(rec) : null;
+  }
+
+  function recordFor(lea) {
+    if (state.mode === "outcomes") {
+      return (OUTCOMES[lea] && OUTCOMES[lea][state.subgroup]) || null;
+    }
+    return (VALS[lea] && VALS[lea][state.year]) || null;
   }
 
   function schoolYear(y) {
@@ -85,7 +138,8 @@
   }
 
   function scaleFor(metric) {
-    const key = metric.id + "|" + state.scale + (state.scale === "year" ? "|" + state.year : "");
+    const key = metric.id + "|" + state.scale + (state.scale === "year" ? "|" + state.year : "")
+      + (metric.mode === "outcomes" ? "|" + state.subgroup : "");
     if (DOMAIN.has(key)) return DOMAIN.get(key);
 
     const vals = [];
@@ -148,10 +202,10 @@
 
   function tooltipFor(layer) {
     const f = layer.feature.properties;
-    const rec = VALS[f.lea] && VALS[f.lea][state.year];
-    const v = rec ? state.metric.get(rec) : null;
+    const v = valueFor(f.lea, state.year, state.metric);
     const shown = v === null ? "\u2014" : state.metric.fmt(v);
-    return `<b>${f.name}</b><span>${state.metric.short}, FY${state.year}</span><br>` +
+    const sub = state.mode === "outcomes" ? ` &middot; ${SUBGROUP_LABELS[state.subgroup]}` : "";
+    return `<b>${f.name}</b><span>${state.metric.short}, ${periodLabel()}${sub}</span><br>` +
       `<em>${shown}</em> <span>${f.group}</span>`;
   }
 
@@ -210,8 +264,9 @@
     const strip = $("legendStrip");
     strip.innerHTML = PALETTE.map((c) => `<i style="background:${c}"></i>`).join("");
     $("legendTitle").textContent = state.metric.label;
-    $("legendNote").textContent = state.scale === "year"
-      ? `relative to FY${state.year}` : "fixed across all years";
+    $("legendNote").textContent = state.mode === "outcomes"
+      ? `${periodLabel()} \u00b7 ${SUBGROUP_LABELS[state.subgroup]}`
+      : (state.scale === "year" ? `relative to FY${state.year}` : "fixed across all years");
     $("legendMin").textContent = state.metric.fmt(d.min);
     $("legendMax").textContent = state.metric.fmt(d.max);
   }
@@ -225,7 +280,7 @@
       .filter((r) => r.v !== null)
       .sort((a, b) => b.v - a.v);
 
-    $("rankYear").textContent = `FY${state.year}`;
+    $("rankYear").textContent = periodLabel();
     if (!rows.length) {
       list.innerHTML = `<li class="rank-empty">No districts match.</li>`;
       return;
@@ -271,7 +326,8 @@
 
   function openDetail(lea) {
     const d = BY_LEA[lea];
-    const rec = VALS[lea][state.year];
+    const rec = recordFor(lea);
+    if (!rec) { closeDetail(); return; }
     const v = state.metric.get(rec);
     const rows = filtered()
       .map((x) => valueFor(x.lea, state.year, state.metric))
@@ -281,12 +337,35 @@
     $("detail").hidden = false;
     $("detailName").textContent = d.name;
     $("detailGroup").textContent = d.group;
-    $("detailLea").textContent = "LEA " + lea;
-    $("detailValue").textContent = state.metric.fmt(v);
-    $("detailMetric").textContent = state.metric.label + ", FY" + state.year;
-    $("detailRank").textContent = `#${rows.indexOf(v) + 1} of ${rows.length}`;
+    $("detailLea").textContent = "LEA " + lea
+      + (state.mode === "outcomes" ? ` \u00b7 ${SUBGROUP_LABELS[state.subgroup]}` : "");
+    $("detailValue").textContent = v === null ? "\u2014" : state.metric.fmt(v);
+    $("detailMetric").textContent = state.metric.label + ", " + periodLabel();
+    $("detailRank").textContent = v === null ? "suppressed" : `#${rows.indexOf(v) + 1} of ${rows.length}`;
 
-    const stats = [
+    const stats = state.mode === "outcomes"
+      ? outcomeStats(rec)
+      : financeStats(rec);
+    $("statGrid").innerHTML = stats
+      .map(([k, val]) => `<div><dt>${k}</dt><dd>${val}</dd></div>`).join("");
+
+    const gAvg = groupAvg(d.group, state.year, state.metric);
+    const gEl = $("groupAvg");
+    if (gAvg !== null && v !== null) {
+      gEl.hidden = false;
+      gEl.innerHTML = `<strong>${d.group} average:</strong> ${state.metric.fmt(gAvg)}`
+        + ` &nbsp;&middot;&nbsp; this district is ${state.metric.fmt(v)}`
+        + ` (${(v > gAvg ? "above" : v < gAvg ? "below" : "at") } avg)`;
+    } else {
+      gEl.hidden = true;
+    }
+
+    if (state.mode === "outcomes") renderOutcomeChart(lea);
+    else renderChart(lea);
+  }
+
+  function financeStats(rec) {
+    return [
       ["Enrollment", int(rec.adm)],
       ["Total spending", usd(rec.total_expenditures)],
       ["Total / pupil", usd(rec.total_per_pupil)],
@@ -297,25 +376,46 @@
       ["Teachers", int(rec.total_teachers)],
       ["Students / teacher", dec1(rec.adm / rec.total_teachers)],
     ];
-    $("statGrid").innerHTML = stats
-      .map(([k, val]) => `<div><dt>${k}</dt><dd>${val}</dd></div>`).join("");
+  }
 
-    const gAvg = groupAvg(d.group, state.year, state.metric);
-    const gEl = $("groupAvg");
-    if (gAvg !== null) {
-      gEl.hidden = false;
-      gEl.innerHTML = `<strong>${d.group} average:</strong> ${state.metric.fmt(gAvg)}`
-        + ` &nbsp;&middot;&nbsp; this district is ${state.metric.fmt(v)}`
-        + ` (${(v > gAvg ? "above" : v < gAvg ? "below" : "at") } avg)`;
-    } else {
-      gEl.hidden = true;
-    }
-
-    renderChart(lea);
+  function outcomeStats(rec) {
+    const show = (v) => v === null ? "suppressed" : pct(v);
+    return [
+      ["Students tested", int(rec.num_tested)],
+      ["All students", show(rec.pct_glp)],
+      ["College/career ready", show(rec.pct_ccr)],
+      ["Not proficient", show(rec.pct_notprof)],
+      ["Level 3", show(rec.pct_l3)],
+      ["Level 4", show(rec.pct_l4)],
+      ["Level 5", show(rec.pct_l5)],
+    ];
   }
 
   function closeDetail() {
     $("detail").hidden = true;
+  }
+
+  function renderOutcomeChart(lea) {
+    const field = state.metric.field;
+    const rows = CHART_SUBGROUPS
+      .map((sg) => ({ sg, rec: OUTCOMES[lea] && OUTCOMES[lea][sg] }))
+      .filter((r) => r.rec && r.rec[field] !== null)
+      .map((r) => ({ sg: r.sg, v: r.rec[field] }));
+
+    $("trendTitle").textContent = `Subgroup breakdown \u00b7 ${periodLabel()}`;
+    if (!rows.length) {
+      $("chart").innerHTML = `<p class="chart-note">No reported values for this measure.</p>`;
+      return;
+    }
+    $("chart").innerHTML = `<div class="sub-bars" role="img" aria-label="${state.metric.label} by student group, ${periodLabel()}">`
+      + rows.map((r) => `
+        <div class="sub-row${r.sg === state.subgroup ? " is-cur" : ""}">
+          <span class="sub-label" title="${SUBGROUP_LABELS[r.sg] || r.sg}">${SUBGROUP_LABELS[r.sg] || r.sg}</span>
+          <span class="sub-track"><i style="width:${Math.max(0, Math.min(100, r.v))}%"></i></span>
+          <span class="sub-val">${state.metric.fmt(r.v)}</span>
+        </div>`).join("")
+      + `</div><p class="chart-note">Bars show ${state.metric.short.toLowerCase()} for each student group; `
+      + `the highlighted row is the group selected on the map.</p>`;
   }
 
   function renderChart(lea) {
@@ -397,6 +497,7 @@
 
   let timer = null;
   function togglePlay() {
+    if (state.mode === "outcomes") return;
     const btn = $("play");
     if (timer) {
       clearInterval(timer); timer = null;
@@ -414,6 +515,58 @@
     }, 900);
   }
 
+  /* ---------- data mode ---------- */
+
+  function applyMode() {
+    const out = state.mode === "outcomes";
+    document.querySelectorAll(".mode-btn").forEach((b) => {
+      const on = b.dataset.mode === state.mode;
+      b.classList.toggle("is-on", on);
+      b.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+    document.querySelectorAll(".chip[data-group]").forEach((c) => {
+      const on = c.dataset.group === state.group;
+      c.classList.toggle("is-on", on);
+      c.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+    $("subgroupField").hidden = !out;
+    $("timeline").hidden = out;
+    document.querySelector(".legend-scale").hidden = out;
+    $("yearLabel").textContent = out ? "Outcomes" : "FY" + state.year;
+    $("syLabel").textContent = out ? "2025\u201326" : schoolYear(state.year);
+
+    const sel = $("metric");
+    sel.innerHTML = activeMetrics().map((m) => `<option value="${m.id}">${m.label}</option>`).join("");
+    sel.value = state.metric.id;
+    $("metricHint").textContent = state.metric.hint;
+    $("year").value = state.year;
+    if (SUBGROUPS.length) $("subgroup").value = state.subgroup;
+
+    if (!out) {
+      document.querySelectorAll(".legend-scale button").forEach((b) => {
+        const on = b.dataset.scale === state.scale;
+        b.classList.toggle("is-on", on);
+        b.setAttribute("aria-pressed", on ? "true" : "false");
+      });
+    }
+  }
+
+  function setMode(mode) {
+    if (mode === state.mode) return;
+    if (timer) togglePlay();
+    state.mode = mode;
+    state.metric = mode === "outcomes" ? OUTCOME_METRICS[0] : METRICS[0];
+    state.subgroup = "ALL";
+    state.scale = "year";
+    DOMAIN.clear();
+    applyMode();
+    renderLegend();
+    refreshStyles();
+    renderRanking();
+    if (state.selected) openDetail(state.selected);
+    syncHash();
+  }
+
   /* ---------- state plumbing ---------- */
 
   function refreshStyles() {
@@ -421,7 +574,11 @@
   }
 
   function syncHash() {
-    const parts = [`y=${state.year}`, `m=${state.metric.id}`, `g=${state.group}`, `s=${state.scale}`];
+    const parts = [
+      `mode=${state.mode}`, `y=${state.year}`, `m=${state.metric.id}`,
+      `g=${state.group}`, `s=${state.scale}`,
+    ];
+    if (state.mode === "outcomes") parts.push(`sg=${state.subgroup}`);
     if (state.selected) parts.push(`d=${state.selected}`);
     try {
       history.replaceState(null, "", "#" + parts.join("&"));
@@ -430,14 +587,22 @@
 
   function readHash() {
     const h = new URLSearchParams(location.hash.replace(/^#/, ""));
-    const m = METRICS.find((x) => x.id === h.get("m"));
+    const mode = h.get("mode");
+    if (mode === "outcomes" || mode === "finance") state.mode = mode;
+    const m = activeMetrics().find((x) => x.id === h.get("m"));
     if (m) state.metric = m;
+    else state.metric = state.mode === "outcomes" ? OUTCOME_METRICS[0] : METRICS[0];
     const y = Number(h.get("y"));
     if (y >= 2005 && y <= 2025) state.year = y;
     const g = h.get("g");
     if (["all", "Large", "Medium", "Small"].includes(g)) state.group = g;
     const sc = h.get("s");
     if (sc === "fixed" || sc === "year") state.scale = sc;
+    if (state.mode === "outcomes") {
+      state.scale = "year";
+      const sg = h.get("sg");
+      if (sg && SUBGROUPS.includes(sg)) state.subgroup = sg;
+    }
     const d = h.get("d");
     if (d && BY_LEA[d]) state.selected = d;
   }
@@ -446,10 +611,10 @@
 
   function wire() {
     const sel = $("metric");
-    sel.innerHTML = METRICS.map((m) => `<option value="${m.id}">${m.label}</option>`).join("");
+    sel.innerHTML = activeMetrics().map((m) => `<option value="${m.id}">${m.label}</option>`).join("");
     sel.value = state.metric.id;
     sel.addEventListener("change", () => {
-      state.metric = METRICS.find((m) => m.id === sel.value);
+      state.metric = activeMetrics().find((m) => m.id === sel.value);
       $("metricHint").textContent = state.metric.hint;
       renderLegend();
       refreshStyles();
@@ -459,7 +624,24 @@
     });
     $("metricHint").textContent = state.metric.hint;
 
-    document.querySelectorAll(".chip").forEach((chip) => {
+    document.querySelectorAll(".mode-btn").forEach((btn) => {
+      btn.addEventListener("click", () => setMode(btn.dataset.mode));
+    });
+
+    const sgSel = $("subgroup");
+    sgSel.innerHTML = SUBGROUPS.map((s) => `<option value="${s}">${SUBGROUP_LABELS[s] || s}</option>`).join("");
+    sgSel.value = state.subgroup;
+    sgSel.addEventListener("change", () => {
+      state.subgroup = sgSel.value;
+      DOMAIN.clear();
+      renderLegend();
+      refreshStyles();
+      renderRanking();
+      if (state.selected) openDetail(state.selected);
+      syncHash();
+    });
+
+    document.querySelectorAll(".chip[data-group]").forEach((chip) => {
       chip.addEventListener("click", () => {
         document.querySelectorAll(".chip").forEach((c) => {
           c.classList.toggle("is-on", c === chip);
@@ -531,19 +713,36 @@
     });
 
     window.addEventListener("hashchange", () => {
-      const d = new URLSearchParams(location.hash.replace(/^#/, "")).get("d");
-      if (d && BY_LEA[d]) select(d, true);
+      readHash();
+      applyMode();
+      DOMAIN.clear();
+      renderLegend();
+      refreshStyles();
+      renderRanking();
+      if (state.selected) { openDetail(state.selected); ensureVisible(state.selected); }
+      else closeDetail();
     });
   }
 
   /* ---------- boot ---------- */
 
   async function boot() {
-    const [panel, geo, context] = await Promise.all([
+    const [panel, geo, context, outcomes] = await Promise.all([
       fetch("data/panel.json").then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); }),
       fetch("data/districts.geojson").then((r) => r.json()),
       fetch("data/context.geojson").then((r) => r.json()),
+      fetch("data/outcomes.json").then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); }),
     ]);
+
+    SUBGROUPS = outcomes.subgroups;
+    const of = {};
+    outcomes.fields.forEach((f, i) => { of[f] = i + 2; });
+    outcomes.rows.forEach((row) => {
+      const lea = row[0], sg = row[1];
+      const rec = {};
+      outcomes.fields.forEach((f) => { rec[f] = row[of[f]] === null ? null : row[of[f]]; });
+      (OUTCOMES[lea] = OUTCOMES[lea] || {})[sg] = rec;
+    });
 
     const idx = {};
     panel.fields.forEach((f, i) => { idx[f] = i + 2; });
@@ -559,14 +758,8 @@
     GEO = geo;
 
     readHash();
-    document.querySelectorAll(".legend-scale button").forEach((b) => {
-      const on = b.dataset.scale === state.scale;
-      b.classList.toggle("is-on", on);
-      b.setAttribute("aria-pressed", on ? "true" : "false");
-    });
     $("year").value = state.year;
-    $("yearLabel").textContent = "FY" + state.year;
-    $("syLabel").textContent = schoolYear(state.year);
+    applyMode();
 
     initMap(geo, context);
     wire();

@@ -1,10 +1,14 @@
-# NCDPI Statistical Profile extractor — OSP district finance study
+# NCDPI data pipeline — OSP district finance & student outcomes study
 
 Automated extraction of district-level enrollment, finance and personnel data from the
 [NC DPI Statistical Profile](https://www.dpi.nc.gov/districts-schools/district-operations/financial-and-business-services/demographics-and-finances),
-replacing the manual "pick a district, pick a year, open the table, export" workflow.
+plus integration of NC DPI's 2025–26 disaggregated End-of-Grade / End-of-Course performance
+data. Together they replace the manual "pick a district, pick a year, open the table, export"
+workflow and add the student-outcome endpoint needed for the epidemiological analysis.
 
-**Final deliverable: 30 districts × 21 fiscal years (FY2005–FY2025) = 630 rows, no gaps.**
+**Finance deliverable: 30 districts × 21 fiscal years (FY2005–FY2025) = 630 rows, no gaps.**
+**Outcomes deliverable: the same 30 districts, 2025–26, with 40 student subgroups and
+54,990 district-level disaggregated rows, plus a one-row-per-district merged analysis file.**
 The 30 districts are the study panel supplied by Bob (10 large / 10 medium / 10 small by
 OSP recipient count).
 
@@ -42,6 +46,11 @@ So Bob's "fiscal years 2005 through 2025" is exactly the app's `Year` 2005–202
 years. (A6 additionally has 2025-26, but A7 has not published 2025-26 yet, so it is
 excluded to keep the panel balanced.)
 
+The **outcomes** data is a single 2025–26 snapshot. Under the same convention it is one
+year after the last finance year: school year 2025–26 = NCDPI year code 2026. The merged
+analysis file labels the two endpoints explicitly (`fiscal_year_finance = 2025`,
+`school_year_outcomes = 2025-26`) rather than pretending they are the same period.
+
 ## Field mapping
 
 | Bob's field | Source | Definition used |
@@ -69,6 +78,46 @@ to cents, the residual never exceeds **0.31** across all 2,415 district-years, s
 rounded value is unambiguous. It was compared against the live `Final ADM` header field
 on every validation sample and matched in all cases.
 
+## Student outcomes (2025–26)
+
+Source: NC DPI Office of Accountability and Testing, *Disaggregated State, Public School
+Unit and School Level Performance Data for 2025–2026* (September 2026). The supplied files
+are `Disag_2025-26/Disag_2025-26_Data.txt` (1,863,702 lines, 159 MB, tab-delimited) and
+`Disag_2025-26/Disag_2025-26_Description.pdf` (code definitions). **The raw directory is
+git-ignored** — it is large and re-obtainable from NCDPI; only the derived outputs are
+committed.
+
+The raw file mixes state, Public School Unit (PSU), and individual school rows. Our study
+districts are the PSU rows whose `school_code` is `<3-digit LEA>LEA` (e.g. `920LEA` = Wake
+County Schools). `build_outcomes.py` keeps **only those PSU rows** for the 30 study LEAs
+(54,990 rows across ~1,833 subject × grade × assessment-type × subgroup cells per district).
+School-level rows remain in the raw source if a within-district analysis is wanted later.
+
+Each row has: `school_code, name, grade_span, subject, grade, type, subgroup, num_tested,
+pct_notprof, pct_l3, pct_l4, pct_l5, pct_ccr, pct_glp, avg_score`. The headline outcomes
+used on the map come from the `ALL / ALL / ALL / ALL` cell (all subjects, all grades, all
+assessment types, all students):
+
+* **GLP** — Grade-Level Proficient, achievement level 3 or above (`pct_glp`)
+* **CCR** — College & Career Ready, achievement levels 4 and 5 (`pct_ccr`)
+* `pct_notprof`, `pct_l3`, `pct_l4`, `pct_l5` are also retained and selectable.
+
+`avg_score` is only reported for subject-specific regular assessments (not for the ALL
+composite), so it is preserved in the tidy file but is not a headline map measure.
+
+**Masking.** NCDPI suppresses percentages below 5% and above 95% (`<5` / `>95`, and `-`
+for masked calculations). Masked cells are left blank in the numeric columns and the
+original token is recorded in a `masked` field (e.g. `pct_l5:<5`). This matters most for
+`pct_l5` (24,672 masked cells across the tidy file) and for small demographic subgroups —
+it is why the site shows blank bars rather than invented values. Headline `pct_glp` and
+`pct_ccr` are complete for all 30 districts.
+
+**Subgroup coverage.** 40 subgroups are present in the source. The tidy file and
+`docs/data/outcomes.json` keep all of them; the headline CSV and the site's subgroup
+selector use a curated set of 19 (ALL, EDS/NOT_EDS, SWD/NOT_SWD, ELS/NOT_ELS, race,
+sex, AIG/NOT_AIG, HMS, MIL). Not every small district has every subgroup — 535 of the
+expected 570 district × subgroup cells are reported.
+
 ## Validation performed
 
 * **67 district-years** re-fetched from the live per-record pages (109/113) and compared
@@ -88,12 +137,25 @@ data/ncdpi_osp_30districts_fy2005_2025.csv    # 630 rows — the study extract
 data/ncdpi_osp_30districts_fy2005_2025.xlsx   # + data_dictionary and coverage sheets
 data/ncdpi_district_year_full.csv             # all 115 districts + charters, 5,093 rows (backup/superset)
 data/ncdpi_district_year_full.xlsx            # + summary sheet
-data/validation_summary_full.json             # coverage/integrity counts
+data/validation_summary_full.json             # coverage/integrity counts (finance)
 data/validation_live_sample.json              # live page-vs-dataset spot checks
+data/disag_2025_26_30districts_tidy.csv       # 54,990 rows — all PSU disaggregations
+data/disag_2025_26_30districts_headline.csv   # 30 rows — ALL/ALL/ALL/ALL + subgroup GLP/CCR
+data/osp_outcomes_merged_30districts.csv      # 30 rows — FY2025 finance + 2025-26 outcomes
+data/osp_outcomes_merged_30districts.xlsx     # + data_dictionary and validation sheets
+data/validation_outcomes.json                 # outcomes coverage/masking/integrity log
 config/districts.csv                          # the 30 districts + group + selected flag
 raw/a6_by_year/a6_<year>.csv                  # untouched source files (21)
 raw/a7_expenditure_all.csv                    # untouched source file
+Disag_2025-26/                                # raw outcomes source (local only, git-ignored)
 ```
+
+The merged file is the analysis-ready endpoint: one row per district with OSP group,
+FY2025 finance and personnel, 2025–26 GLP/CCR/achievement-level outcomes for all 30
+districts and the curated subgroups, plus six disparity gaps
+(`glp_gap_eds`, `glp_gap_swd`, `glp_gap_race` and their `ccr_` counterparts, computed as
+advantaged minus disadvantaged in percentage points). Five districts lack at least one
+gap because a comparison subgroup is suppressed or absent.
 
 Study extract columns:
 
@@ -126,6 +188,7 @@ re-run `build_osp_extract.py`.
 .venv/bin/python extract_a6_year.py 2005 2006 ... 2025    # 21 downloads
 .venv/bin/python build_dataset.py                         # consolidate all LEAs
 .venv/bin/python build_osp_extract.py                     # 30-district study extract
+.venv/bin/python build_outcomes.py                        # outcomes + merged analysis file
 .venv/bin/python validate_live.py 15 osp                  # live spot check (study panel)
 .venv/bin/python validate_live.py 40 osp-all              # all 30 districts at FY2025 + FY2005
 ```
@@ -148,14 +211,24 @@ headless server).
 ## Interactive map
 
 A companion interactive map is published at **https://johnlockefoundation.github.io/edu**:
-a Leaflet choropleth of the 30 study districts with a fiscal-year slider (FY2005–FY2025),
-metric selector, district-level trend charts, and a ranking panel. The site is built
-entirely from the files in `docs/data/` by `build_site.py`; it runs with no server and
-no external APIs. To rebuild it locally:
+a Leaflet choropleth of the 30 study districts with two modes.
+
+* **Finance & staffing** (default) — fiscal-year slider FY2005–FY2025, 15 metrics,
+  district-level trend chart with a dashed group-average overlay, and ranking.
+* **Student outcomes** — 2025–26 results for GLP, CCR, not-proficient and achievement
+  levels 3–5, with a student-group selector (19 groups) that recolors the map, ranking
+  and group average. Selecting a district shows a subgroup breakdown bar chart. The
+  timeline and fixed scale are hidden because there is only one outcome period.
+
+Both modes share the group chips, search, and the selected-district detail card, and all
+state is URL-serialized (`#mode=outcomes&m=glp&sg=EDS&g=Small&d=480`). The site is built
+entirely from the files in `docs/data/`; it runs with no external APIs or tile basemap.
+To rebuild it locally:
 
 ```bash
-.venv/bin/python build_osp_extract.py   # (if data changed)
-.venv/bin/python build_site.py
+.venv/bin/python build_osp_extract.py   # (if finance data changed)
+.venv/bin/python build_site.py           # geometry + panel.json
+.venv/bin/python build_outcomes.py       # docs/data/outcomes.json + CSV download
 cd docs && python -m http.server 8765
 ```
 
@@ -171,3 +244,10 @@ cd docs && python -m http.server 8765
   `ncdpi_district_year_full.csv` if you need exact additivity.
 * Charter/regional LEAs appear in `full` (`lea_type = charter_or_regional`) but most are
   absent from A7, hence A6-only rows there. The study extract contains districts only.
+* Outcomes are a **single cross-section** (2025–26), one year after the last finance year.
+  They cannot support a within-district trend, and the site deliberately does not draw a
+  21-year line for them. Treating OSP group differences in outcomes as causal would still
+  require a research design; the merged file is an analysis input, not a result.
+* Outcome percentages are published by NCDPI with masking applied; suppressed cells are
+  blank, not zero. Group averages on the site are unweighted means of district values,
+  not student-weighted pooled rates.

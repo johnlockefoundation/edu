@@ -1,0 +1,78 @@
+{
+  "retrieved_at": "2026-11-24T01:54:27Z",
+  "school_year": "2025-26",
+  "raw_file": "Disag_2025-26_Data.txt",
+  "raw_file_bytes": 158961971,
+  "source": "NC DPI Office of Accountability and Testing, Disaggregated State, Public School Unit and School Level Performance Data, 2025-26",
+  "districts_expected": 30,
+  "districts_found": 30,
+  "tidy_rows": 54990,
+  "headline_rows": 30,
+  "merged_rows": 30,
+  "masked_values_by_column": {
+    "pct_notprof": {
+      "<5": 1336,
+      ">95": 224
+    },
+    "pct_l3": {
+      "<5": 1019,
+      ">95": 3
+    },
+    "pct_l4": {
+      "<5": 6185
+    },
+    "pct_l5": {
+      "<5": 24672
+    },
+    "pct_ccr": {
+      "<5": 5545,
+      ">95": 171
+    },
+    "pct_glp": {
+      ">95": 1336,
+      "<5": 224
+    }
+  },
+  "glp_range": [
+    5.6,
+    91.7
+  ],
+  "ccr_range": [
+    5.0,
+    73.9
+  ],
+  "subgroups": 40,
+  "subjects": [
+    "ALL",
+    "BI",
+    "E2",
+    "EOC",
+    "EOG",
+    "M1",
+    "M3",
+    "MA",
+    "RD",
+    "SC"
+  ],
+  "grades": [
+    "03",
+    "04",
+    "05",
+    "06",
+    "07",
+    "08",
+    "ALL",
+    "EOC",
+    "GS"
+  ],
+  "assessment_types": [
+    "ALL",
+    "RG",
+    "X1"
+  ],
+  "headline_missing_districts": [],
+  "finance_missing_districts": [],
+  "duplicate_headline_keys": 0,
+  "avg_score_note": "avg_score is only reported for subject-specific regular assessments; it is blank at ALL subjects/grades and is therefore excluded from the headline metrics.",
+  "masking_note": "NCDPI suppresses percentages below 5 or above 95. Masked cells are blank in numeric columns and recorded as column:token in the 'masked' field."
+}
