@@ -1,5 +1,5 @@
 {
-  "retrieved_at": "2026-11-24T02:07:09Z",
+  "retrieved_at": "2026-11-24T02:31:13Z",
   "school_year": "2025-26",
   "raw_file": "Disag_2025-26_Data.txt",
   "raw_file_bytes": 158961971,
@@ -74,9 +74,18 @@
   "finance_missing_districts": [],
   "duplicate_headline_keys": 0,
   "roi_definition": "cpp_<sub> = FY2025 total per-pupil spending / (2025-26 pct_glp for subgroup / 100), i.e. dollars spent per student reaching grade-level proficiency. Lower is better. Blank where GLP is masked or zero.",
+  "roi_measures": [
+    "cpp_ALL (all students)",
+    "cpp_NOT_SWD (excludes students with disabilities; English learners remain included)"
+  ],
+  "roi_excl_swd_definition": "cpp_NOT_SWD uses the NOT_SWD proficiency rate. NC DPI publishes no combined 'not disabled and not English learner' subgroup, so English learners are not excluded.",
   "cpp_all_range": [
     15152,
     62494
+  ],
+  "cpp_not_swd_range": [
+    14137,
+    55698
   ],
   "cpp_column_count": 19,
   "avg_score_note": "avg_score is only reported for subject-specific regular assessments; it is blank at ALL subjects/grades and is therefore excluded from the headline metrics.",

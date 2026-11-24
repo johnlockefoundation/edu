@@ -131,16 +131,27 @@ It answers "how many FY2025 dollars were spent for each student who reached grad
 proficiency in 2025–26?" Lower is better. The merged file has one `cpp_` column for each
 of the 19 curated subgroups, including `cpp_ALL`; all are whole dollars, and they are
 blank where GLP is masked or zero. Across the 30 districts, `cpp_ALL` runs from
-$15,152 (Union) to $62,494. The site's ROI view uses the same formula, ranks districts
-from lowest cost upward, and keeps the student-group selector so the comparison can be
-repeated for any group. Its red color scale is relative to each district's OSP-group
-median rather than to the full 30-district range (see Interactive map below).
+$15,152 (Union) to $62,494.
+
+The website deliberately exposes only **two** ROI measures:
+
+1. **All students** (`cpp_ALL`) — the main efficiency comparison.
+2. **Excludes students with disabilities** (`cpp_NOT_SWD`) — $14,137 to $55,698 across
+   the 30 districts.
+
+The second measure still **includes English learners**. NC DPI does not publish an
+intersection subgroup for "not disabled AND not English learner," so a true both-excluded
+ROI cannot be computed from the aggregated file. Subgroup ROI is otherwise not shown:
+district-wide spending divided by a subgroup's proficiency rate would assume every group
+receives the same per-pupil spending, which is not true. Subgroup *rates* remain available
+in Student outcomes mode and in the merged file.
 
 This is an **efficiency ratio, not a causal estimate**. It divides one cross-sectional
 spending measure by one cross-sectional outcome measure one year later; it does not
 control for student need, district size, baseline achievement, or the timing of spending.
-It is most useful for comparing groups or districts within the study panel, and least
-useful for small subgroups where GLP is masked.
+The site ranks districts from lowest cost upward, and its red color scale is relative to
+each district's OSP-group median rather than to the full 30-district range (see
+Interactive map below).
 
 ## Validation performed
 
@@ -244,16 +255,17 @@ a Leaflet choropleth of the 30 study districts with three modes.
   levels 3–5, with a student-group selector (19 groups) that recolors the map, ranking
   and group average. Selecting a district shows a subgroup breakdown bar chart. The
   timeline and fixed scale are hidden because there is only one outcome period.
-* **ROI** — cost per proficient student, using the same student-group selector. The
-  ranking is ascending (best value first). The map uses a sequential red scale rather
-  than the blue finance palette: each district is compared with the **median of its own
-  OSP group** (Large/Medium/Small) for the selected student group. Pale red is at or
+* **ROI** — cost per proficient student, with **no subgroup selector**. Two measures are
+  offered: all students and students not identified with disabilities (English learners
+  remain included). The ranking is ascending (best value first). The map uses a sequential
+  red scale rather than the blue finance palette: each district is compared with the
+  **median of its own OSP group** (Large/Medium/Small) for that measure. Pale red is at or
   below the median; deeper shades mark +10%, +25%, +50%, +100% and +150% or more per
   proficient student. The detail card shows the group median and the exact percentage
-  difference.
+  difference, plus a note on the measure's scope.
 
 All three modes share the group chips, search, and the selected-district detail card, and
-all state is URL-serialized (`#mode=roi&sg=EDS&g=Small&d=480`). The site is built entirely
+all state is URL-serialized (`#mode=roi&m=cpp_nswd&g=Small&d=480`). The site is built entirely
 from the files in `docs/data/`; it runs with no external APIs or tile basemap.
 To rebuild it locally:
 

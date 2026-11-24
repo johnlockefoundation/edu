@@ -74,8 +74,13 @@
   // reaching grade-level proficiency in 2025-26. Lower cost is better.
   const ROI_METRICS = [
     { id: "cpp", label: "Cost per proficient student", short: "Cost / proficient", fmt: usd,
-      mode: "roi", lowerIsBetter: true,
-      hint: "FY2025 total per-pupil spending divided by (2025–26 GLP / 100). Lower is better." },
+      mode: "roi", lowerIsBetter: true, subgroup: "ALL", population: "All students",
+      hint: "FY2025 total per-pupil spending divided by (2025–26 GLP / 100), all students. Lower is better.",
+      scopeNote: "ROI uses all students only. NCDPI does not publish subgroup-specific spending, so subgroup ROI is not available here." },
+    { id: "cpp_nswd", label: "Cost per proficient student (excl. disabled)", short: "Cost / proficient (no SWD)", fmt: usd,
+      mode: "roi", lowerIsBetter: true, subgroup: "NOT_SWD", population: "Excludes students with disabilities",
+      hint: "Uses GLP for students not identified with disabilities. English learners remain included. Lower is better.",
+      scopeNote: "This measure excludes students with disabilities only. NC DPI has no combined 'not disabled and not English learner' subgroup, so English learners remain included." },
   ];
 
   const SUBGROUP_LABELS = {
@@ -123,22 +128,27 @@
     return "FY" + state.year;
   }
 
-  function usesOutcomes() {
-    return state.mode === "outcomes" || state.mode === "roi";
+  function roiSubgroup(metric) {
+    return metric && metric.subgroup ? metric.subgroup : "ALL";
   }
 
-  function roiFor(lea, rec) {
+  function roiRecord(lea, metric) {
+    return (OUTCOMES[lea] && OUTCOMES[lea][roiSubgroup(metric)]) || null;
+  }
+
+  function roiFor(lea, metric) {
     const pp = FIN_2025[lea];
+    const rec = roiRecord(lea, metric);
     if (!rec || rec.pct_glp === null || !(rec.pct_glp > 0) || !pp) return null;
     return (pp.total_per_pupil * 100) / rec.pct_glp;
   }
 
-  function roiMedian(group) {
-    const key = "roi-median|" + state.subgroup + "|" + group;
+  function roiMedian(group, metric) {
+    const key = "roi-median|" + metric.id + "|" + group;
     if (DOMAIN.has(key)) return DOMAIN.get(key);
     const vals = DISTRICTS
       .filter((d) => d.group === group)
-      .map((d) => roiFor(d.lea, OUTCOMES[d.lea] && OUTCOMES[d.lea][state.subgroup]))
+      .map((d) => roiFor(d.lea, metric))
       .filter((v) => v !== null && Number.isFinite(v))
       .sort((a, b) => a - b);
     const med = vals.length
@@ -149,18 +159,18 @@
     return med;
   }
 
-  // Percent above the district's own OSP-group median, for the selected group.
-  function roiExcess(lea) {
+  // Percent above the district's own OSP-group median, for this ROI measure.
+  function roiExcess(lea, metric) {
     const d = BY_LEA[lea];
     if (!d) return null;
-    const v = roiFor(lea, OUTCOMES[lea] && OUTCOMES[lea][state.subgroup]);
-    const med = roiMedian(d.group);
+    const v = roiFor(lea, metric);
+    const med = roiMedian(d.group, metric);
     if (v === null || med === null || !(med > 0)) return null;
     return (v / med - 1) * 100;
   }
 
-  function roiRelativeText(lea, short = false) {
-    const ex = roiExcess(lea);
+  function roiRelativeText(lea, metric, short = false) {
+    const ex = roiExcess(lea, metric);
     if (ex === null) return short ? "—" : "no comparison available";
     if (ex <= 0) return short ? "≤ median" : "at or below the group median";
     return "+" + Math.round(ex) + "% vs median";
@@ -183,14 +193,15 @@
       return rec ? metric.get(rec) : null;
     }
     if (metric.mode === "roi") {
-      return roiFor(lea, OUTCOMES[lea] && OUTCOMES[lea][state.subgroup]);
+      return roiFor(lea, metric);
     }
     const rec = VALS[lea] && VALS[lea][year];
     return rec ? metric.get(rec) : null;
   }
 
   function recordFor(lea) {
-    if (usesOutcomes()) {
+    if (state.mode === "roi") return roiRecord(lea, state.metric);
+    if (state.mode === "outcomes") {
       return (OUTCOMES[lea] && OUTCOMES[lea][state.subgroup]) || null;
     }
     return (VALS[lea] && VALS[lea][state.year]) || null;
@@ -202,7 +213,7 @@
 
   function scaleFor(metric) {
     const key = metric.id + "|" + state.scale + (state.scale === "year" ? "|" + state.year : "")
-      + (usesOutcomes() ? "|" + state.subgroup : "");
+      + (state.mode === "outcomes" ? "|" + state.subgroup : "");
     if (DOMAIN.has(key)) return DOMAIN.get(key);
 
     const vals = [];
@@ -229,10 +240,10 @@
     return out;
   }
 
-  function colorFor(lea, v, d) {
+  function colorFor(lea, v, d, metric) {
     if (v === null) return "#f1f4f6";
     if (d.roi) {
-      const ex = roiExcess(lea);
+      const ex = roiExcess(lea, metric);
       if (ex === null) return "#f1f4f6";
       let i = 0;
       while (i < ROI_STEPS.length && ex >= ROI_STEPS[i]) i++;
@@ -262,7 +273,7 @@
     const on = visible(BY_LEA[f.lea]);
     const sel = state.selected === f.lea;
     return {
-      fillColor: colorFor(f.lea, v, d),
+      fillColor: colorFor(f.lea, v, d, state.metric),
       fillOpacity: on ? 1 : 0.12,
       color: sel ? "#0b2b3a" : "#ffffff",
       weight: sel ? 2.4 : 0.9,
@@ -274,8 +285,8 @@
     const f = layer.feature.properties;
     const v = valueFor(f.lea, state.year, state.metric);
     const shown = v === null ? "\u2014" : state.metric.fmt(v);
-    const sub = usesOutcomes() ? ` &middot; ${SUBGROUP_LABELS[state.subgroup]}` : "";
-    const rel = state.mode === "roi" ? ` &middot; ${roiRelativeText(f.lea, true)}` : "";
+    const sub = state.mode === "outcomes" ? ` &middot; ${SUBGROUP_LABELS[state.subgroup]}` : "";
+    const rel = state.mode === "roi" ? ` &middot; ${roiRelativeText(f.lea, state.metric, true)}` : "";
     return `<b>${f.name}</b><span>${state.metric.short}, ${periodLabel()}${sub}</span><br>` +
       `<em>${shown}</em> <span>${f.group}${rel}</span>`;
   }
@@ -337,7 +348,7 @@
     strip.innerHTML = palette.map((c) => `<i style="background:${c}"></i>`).join("");
     $("legendTitle").textContent = state.metric.label;
     $("legendNote").textContent = state.mode === "roi"
-      ? `${periodLabel()} \u00b7 ${SUBGROUP_LABELS[state.subgroup]} \u00b7 % above OSP group median`
+      ? `${periodLabel()} \u00b7 ${state.metric.population} \u00b7 % above OSP group median`
       : state.mode === "outcomes"
         ? `${periodLabel()} \u00b7 ${SUBGROUP_LABELS[state.subgroup]}`
         : (state.scale === "year" ? `relative to FY${state.year}` : "fixed across all years");
@@ -418,12 +429,12 @@
     $("detailName").textContent = d.name;
     $("detailGroup").textContent = d.group;
     $("detailLea").textContent = "LEA " + lea
-      + (usesOutcomes() ? ` \u00b7 ${SUBGROUP_LABELS[state.subgroup]}` : "");
+      + (state.mode === "outcomes" ? ` \u00b7 ${SUBGROUP_LABELS[state.subgroup]}` : "");
     $("detailValue").textContent = v === null ? "\u2014" : state.metric.fmt(v);
     $("detailMetric").textContent = state.metric.label + ", " + periodLabel();
     $("detailRank").textContent = v === null ? "suppressed" : `#${rows.indexOf(v) + 1} of ${rows.length}`;
 
-    const stats = state.mode === "roi" ? roiStats(rec, lea)
+    const stats = state.mode === "roi" ? roiStats(rec, lea, state.metric)
       : state.mode === "outcomes" ? outcomeStats(rec)
         : financeStats(rec);
     $("statGrid").innerHTML = stats
@@ -444,7 +455,8 @@
       gEl.hidden = true;
     }
 
-    if (usesOutcomes()) renderSubgroupChart(lea);
+    if (state.mode === "roi") renderRoiNote();
+    else if (state.mode === "outcomes") renderSubgroupChart(lea);
     else renderChart(lea);
   }
 
@@ -475,17 +487,18 @@
     ];
   }
 
-  function roiStats(rec, lea) {
+  function roiStats(rec, lea, metric) {
     const show = (v) => v === null ? "suppressed" : pct(v);
     const fin = FIN_2025[lea] || {};
-    const cost = roiFor(lea, rec);
-    const med = roiMedian(BY_LEA[lea].group);
+    const cost = roiFor(lea, metric);
+    const med = roiMedian(BY_LEA[lea].group, metric);
+    const glpLabel = metric.subgroup === "ALL" ? "Proficient (GLP)" : "Proficient, not SWD";
     return [
       ["Spend / pupil, FY25", fin.total_per_pupil ? usd(fin.total_per_pupil) : "\u2014"],
-      ["Proficient (GLP)", show(rec.pct_glp)],
+      [glpLabel, show(rec.pct_glp)],
       ["Cost / proficient", cost === null ? "\u2014" : usd(cost)],
       ["Group median", med === null ? "\u2014" : usd(med)],
-      ["vs median", roiRelativeText(lea, true)],
+      ["vs median", roiRelativeText(lea, metric, true)],
       ["Students tested", int(rec.num_tested)],
       ["College/career ready", show(rec.pct_ccr)],
       ["Not proficient", show(rec.pct_notprof)],
@@ -496,13 +509,17 @@
     $("detail").hidden = true;
   }
 
+  function renderRoiNote() {
+    $("trendTitle").textContent = "Scope of this measure";
+    $("chart").innerHTML = `<p class="chart-note">${state.metric.scopeNote}</p>`;
+  }
+
   function renderSubgroupChart(lea) {
-    const roi = state.mode === "roi";
     const field = state.metric.field;
     const rows = CHART_SUBGROUPS.map((sg) => {
       const rec = OUTCOMES[lea] && OUTCOMES[lea][sg];
       if (!rec) return null;
-      const v = roi ? roiFor(lea, rec) : (field ? rec[field] : null);
+      const v = field ? rec[field] : null;
       return v === null || !Number.isFinite(v) ? null : { sg, v };
     }).filter(Boolean);
 
@@ -512,18 +529,14 @@
       return;
     }
     const max = Math.max(...rows.map((r) => r.v)) || 1;
-    const fmt = roi ? usd : state.metric.fmt;
     $("chart").innerHTML = `<div class="sub-bars" role="img" aria-label="${state.metric.label} by student group, ${periodLabel()}">`
       + rows.map((r) => `
         <div class="sub-row${r.sg === state.subgroup ? " is-cur" : ""}">
           <span class="sub-label" title="${SUBGROUP_LABELS[r.sg] || r.sg}">${SUBGROUP_LABELS[r.sg] || r.sg}</span>
           <span class="sub-track"><i style="width:${Math.max(2, Math.min(100, (r.v / max) * 100))}%"></i></span>
-          <span class="sub-val">${fmt(r.v)}</span>
+          <span class="sub-val">${state.metric.fmt(r.v)}</span>
         </div>`).join("")
-      + `</div><p class="chart-note">`
-      + (roi
-        ? "Bars show cost per proficient student for each group; longer bars cost more. "
-        : `Bars show ${state.metric.short.toLowerCase()} for each student group. `)
+      + `</div><p class="chart-note">Bars show ${state.metric.short.toLowerCase()} for each student group. `
       + `The highlighted row is the group selected on the map.</p>`;
   }
 
@@ -627,7 +640,7 @@
   /* ---------- data mode ---------- */
 
   function applyMode() {
-    const out = usesOutcomes();
+    const nonFinance = state.mode !== "finance";
     document.querySelectorAll(".mode-btn").forEach((b) => {
       const on = b.dataset.mode === state.mode;
       b.classList.toggle("is-on", on);
@@ -638,9 +651,9 @@
       c.classList.toggle("is-on", on);
       c.setAttribute("aria-pressed", on ? "true" : "false");
     });
-    $("subgroupField").hidden = !out;
-    $("timeline").hidden = out;
-    document.querySelector(".legend-scale").hidden = out;
+    $("subgroupField").hidden = state.mode !== "outcomes";
+    $("timeline").hidden = nonFinance;
+    document.querySelector(".legend-scale").hidden = nonFinance;
     $("yearLabel").textContent = state.mode === "roi" ? "ROI"
       : state.mode === "outcomes" ? "Outcomes" : "FY" + state.year;
     $("syLabel").textContent = state.mode === "roi" ? "FY2025 \u2192 2025\u201326"
@@ -653,7 +666,7 @@
     $("year").value = state.year;
     if (SUBGROUPS.length) $("subgroup").value = state.subgroup;
 
-    if (!out) {
+    if (!nonFinance) {
       document.querySelectorAll(".legend-scale button").forEach((b) => {
         const on = b.dataset.scale === state.scale;
         b.classList.toggle("is-on", on);
@@ -690,7 +703,7 @@
       `mode=${state.mode}`, `y=${state.year}`, `m=${state.metric.id}`,
       `g=${state.group}`, `s=${state.scale}`,
     ];
-    if (usesOutcomes()) parts.push(`sg=${state.subgroup}`);
+    if (state.mode === "outcomes") parts.push(`sg=${state.subgroup}`);
     if (state.selected) parts.push(`d=${state.selected}`);
     try {
       history.replaceState(null, "", "#" + parts.join("&"));
@@ -711,8 +724,10 @@
     if (["all", "Large", "Medium", "Small"].includes(g)) state.group = g;
     const sc = h.get("s");
     if (sc === "fixed" || sc === "year") state.scale = sc;
-    if (usesOutcomes()) {
+    if (state.mode !== "finance") {
       state.scale = "year";
+    }
+    if (state.mode === "outcomes") {
       const sg = h.get("sg");
       if (sg && SUBGROUPS.includes(sg)) state.subgroup = sg;
     }

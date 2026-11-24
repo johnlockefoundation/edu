@@ -82,6 +82,7 @@ FIELD_DEFINITIONS = {
     "ccr_gap_race": "WHTE minus BLCK college-and-career readiness (percentage points)",
     "cpp_ALL": "Cost per proficient student, all students: FY2025 total per-pupil spending divided by (2025-26 GLP / 100). Lower is better.",
     "cpp_<sub>": "Cost per proficient student for subgroup <sub>, using FY2025 total per-pupil spending and 2025-26 GLP. Lower is better.",
+    "cpp_NOT_SWD": "Cost per proficient student for students not identified with disabilities, using FY2025 total per-pupil spending and 2025-26 GLP. English learners remain included; no combined NOT_SWD + NOT_ELS subgroup is published.",
     "fiscal_year_finance": "Latest finance year in the study panel (FY2025 = 2024-25)",
     "school_year_outcomes": "School year of the outcome measurement (2025-26)",
     "source_a7": "NCDPI Statistical Profile Table A7 provenance (expenditures)",
@@ -298,8 +299,13 @@ def build() -> dict:
             headline.duplicated(subset=["lea_code", "school_year"]).sum()
         ),
         "roi_definition": "cpp_<sub> = FY2025 total per-pupil spending / (2025-26 pct_glp for subgroup / 100), i.e. dollars spent per student reaching grade-level proficiency. Lower is better. Blank where GLP is masked or zero.",
+        "roi_measures": ["cpp_ALL (all students)", "cpp_NOT_SWD (excludes students with disabilities; English learners remain included)"],
+        "roi_excl_swd_definition": "cpp_NOT_SWD uses the NOT_SWD proficiency rate. NC DPI publishes no combined 'not disabled and not English learner' subgroup, so English learners are not excluded.",
         "cpp_all_range": [
             int(merged["cpp_ALL"].min()), int(merged["cpp_ALL"].max())
+        ],
+        "cpp_not_swd_range": [
+            int(merged["cpp_NOT_SWD"].min()), int(merged["cpp_NOT_SWD"].max())
         ],
         "cpp_column_count": len(SITE_SUBGROUPS),
         "avg_score_note": "avg_score is only reported for subject-specific regular assessments; it is blank at ALL subjects/grades and is therefore excluded from the headline metrics.",
