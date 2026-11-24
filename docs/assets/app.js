@@ -6,6 +6,10 @@
   "use strict";
 
   const PALETTE = ["#e4eef4", "#c6dfe9", "#a3cbda", "#7bb3c8", "#5499b3", "#2f7d99", "#0d5f7c"];
+  // ROI uses a sequential red scale: light = at/below the OSP group median,
+  // dark = increasingly more expensive per proficient student.
+  const ROI_PALETTE = ["#fdecec", "#fbd4d4", "#f7b3b3", "#f28c8c", "#e86262", "#d43b3b", "#b71c1c"];
+  const ROI_STEPS = [0, 10, 25, 50, 100, 150]; // percent above group median
   const YEARS = Array.from({ length: 21 }, (_, i) => 2005 + i);
   const nf0 = new Intl.NumberFormat("en-US");
   const usd = (v) => "$" + nf0.format(Math.round(v));
@@ -129,6 +133,39 @@
     return (pp.total_per_pupil * 100) / rec.pct_glp;
   }
 
+  function roiMedian(group) {
+    const key = "roi-median|" + state.subgroup + "|" + group;
+    if (DOMAIN.has(key)) return DOMAIN.get(key);
+    const vals = DISTRICTS
+      .filter((d) => d.group === group)
+      .map((d) => roiFor(d.lea, OUTCOMES[d.lea] && OUTCOMES[d.lea][state.subgroup]))
+      .filter((v) => v !== null && Number.isFinite(v))
+      .sort((a, b) => a - b);
+    const med = vals.length
+      ? (vals.length % 2 ? vals[(vals.length - 1) / 2]
+        : (vals[vals.length / 2 - 1] + vals[vals.length / 2]) / 2)
+      : null;
+    DOMAIN.set(key, med);
+    return med;
+  }
+
+  // Percent above the district's own OSP-group median, for the selected group.
+  function roiExcess(lea) {
+    const d = BY_LEA[lea];
+    if (!d) return null;
+    const v = roiFor(lea, OUTCOMES[lea] && OUTCOMES[lea][state.subgroup]);
+    const med = roiMedian(d.group);
+    if (v === null || med === null || !(med > 0)) return null;
+    return (v / med - 1) * 100;
+  }
+
+  function roiRelativeText(lea, short = false) {
+    const ex = roiExcess(lea);
+    if (ex === null) return short ? "—" : "no comparison available";
+    if (ex <= 0) return short ? "≤ median" : "at or below the group median";
+    return "+" + Math.round(ex) + "% vs median";
+  }
+
   function groupAvg(group, year, metric) {
     const vals = DISTRICTS.filter((d) => d.group === group)
       .map((d) => valueFor(d.lea, year, metric))
@@ -187,17 +224,23 @@
     } else {
       for (let i = 1; i < 7; i++) breaks.push(vals[Math.floor((vals.length * i) / 7)]);
     }
-    const out = { min, max, breaks, reverse: !!metric.lowerIsBetter };
+    const out = { min, max, breaks, reverse: !!metric.lowerIsBetter, roi: metric.mode === "roi" };
     DOMAIN.set(key, out);
     return out;
   }
 
-  function colorFor(v, d) {
+  function colorFor(lea, v, d) {
     if (v === null) return "#f1f4f6";
+    if (d.roi) {
+      const ex = roiExcess(lea);
+      if (ex === null) return "#f1f4f6";
+      let i = 0;
+      while (i < ROI_STEPS.length && ex >= ROI_STEPS[i]) i++;
+      return ROI_PALETTE[i];
+    }
     let i = 0;
     while (i < d.breaks.length && v >= d.breaks[i]) i++;
-    // For cost-style metrics, dark = low cost = better.
-    return d.reverse ? PALETTE[PALETTE.length - 1 - i] : PALETTE[i];
+    return PALETTE[i];
   }
 
   function visible(d) {
@@ -219,7 +262,7 @@
     const on = visible(BY_LEA[f.lea]);
     const sel = state.selected === f.lea;
     return {
-      fillColor: colorFor(v, d),
+      fillColor: colorFor(f.lea, v, d),
       fillOpacity: on ? 1 : 0.12,
       color: sel ? "#0b2b3a" : "#ffffff",
       weight: sel ? 2.4 : 0.9,
@@ -232,8 +275,9 @@
     const v = valueFor(f.lea, state.year, state.metric);
     const shown = v === null ? "\u2014" : state.metric.fmt(v);
     const sub = usesOutcomes() ? ` &middot; ${SUBGROUP_LABELS[state.subgroup]}` : "";
+    const rel = state.mode === "roi" ? ` &middot; ${roiRelativeText(f.lea, true)}` : "";
     return `<b>${f.name}</b><span>${state.metric.short}, ${periodLabel()}${sub}</span><br>` +
-      `<em>${shown}</em> <span>${f.group}</span>`;
+      `<em>${shown}</em> <span>${f.group}${rel}</span>`;
   }
 
   function initMap(geojson, context) {
@@ -289,16 +333,16 @@
   function renderLegend() {
     const d = scaleFor(state.metric);
     const strip = $("legendStrip");
-    const palette = d.reverse ? PALETTE.slice().reverse() : PALETTE;
+    const palette = d.roi ? ROI_PALETTE : PALETTE;
     strip.innerHTML = palette.map((c) => `<i style="background:${c}"></i>`).join("");
     $("legendTitle").textContent = state.metric.label;
     $("legendNote").textContent = state.mode === "roi"
-      ? `${periodLabel()} \u00b7 ${SUBGROUP_LABELS[state.subgroup]} \u00b7 lower is better`
+      ? `${periodLabel()} \u00b7 ${SUBGROUP_LABELS[state.subgroup]} \u00b7 % above OSP group median`
       : state.mode === "outcomes"
         ? `${periodLabel()} \u00b7 ${SUBGROUP_LABELS[state.subgroup]}`
         : (state.scale === "year" ? `relative to FY${state.year}` : "fixed across all years");
-    $("legendMin").textContent = state.metric.fmt(d.min);
-    $("legendMax").textContent = state.metric.fmt(d.max);
+    $("legendMin").textContent = d.roi ? "at/below median" : state.metric.fmt(d.min);
+    $("legendMax").textContent = d.roi ? "+150% or more" : state.metric.fmt(d.max);
   }
 
   /* ---------- ranking ---------- */
@@ -435,10 +479,13 @@
     const show = (v) => v === null ? "suppressed" : pct(v);
     const fin = FIN_2025[lea] || {};
     const cost = roiFor(lea, rec);
+    const med = roiMedian(BY_LEA[lea].group);
     return [
       ["Spend / pupil, FY25", fin.total_per_pupil ? usd(fin.total_per_pupil) : "\u2014"],
       ["Proficient (GLP)", show(rec.pct_glp)],
       ["Cost / proficient", cost === null ? "\u2014" : usd(cost)],
+      ["Group median", med === null ? "\u2014" : usd(med)],
+      ["vs median", roiRelativeText(lea, true)],
       ["Students tested", int(rec.num_tested)],
       ["College/career ready", show(rec.pct_ccr)],
       ["Not proficient", show(rec.pct_notprof)],

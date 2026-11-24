@@ -131,9 +131,10 @@ It answers "how many FY2025 dollars were spent for each student who reached grad
 proficiency in 2025–26?" Lower is better. The merged file has one `cpp_` column for each
 of the 19 curated subgroups, including `cpp_ALL`; all are whole dollars, and they are
 blank where GLP is masked or zero. Across the 30 districts, `cpp_ALL` runs from
-$15,152 (Union) to $62,494. The site's ROI view uses the same formula, reverses the
-color scale and ranking so the best value appears first, and keeps the student-group
-selector so the comparison can be repeated for any group.
+$15,152 (Union) to $62,494. The site's ROI view uses the same formula, ranks districts
+from lowest cost upward, and keeps the student-group selector so the comparison can be
+repeated for any group. Its red color scale is relative to each district's OSP-group
+median rather than to the full 30-district range (see Interactive map below).
 
 This is an **efficiency ratio, not a causal estimate**. It divides one cross-sectional
 spending measure by one cross-sectional outcome measure one year later; it does not
@@ -244,8 +245,12 @@ a Leaflet choropleth of the 30 study districts with three modes.
   and group average. Selecting a district shows a subgroup breakdown bar chart. The
   timeline and fixed scale are hidden because there is only one outcome period.
 * **ROI** — cost per proficient student, using the same student-group selector. The
-  ranking is ascending (best value first), the color scale is reversed so dark = low
-  cost = better, and the detail card shows the underlying spending and GLP.
+  ranking is ascending (best value first). The map uses a sequential red scale rather
+  than the blue finance palette: each district is compared with the **median of its own
+  OSP group** (Large/Medium/Small) for the selected student group. Pale red is at or
+  below the median; deeper shades mark +10%, +25%, +50%, +100% and +150% or more per
+  proficient student. The detail card shows the group median and the exact percentage
+  difference.
 
 All three modes share the group chips, search, and the selected-district detail card, and
 all state is URL-serialized (`#mode=roi&sg=EDS&g=Small&d=480`). The site is built entirely
